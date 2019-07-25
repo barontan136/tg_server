@@ -1,0 +1,149 @@
+{extend name="base" /}
+{block name="body"}
+<link rel="stylesheet" href="__JS__/citypicker/city-picker.css">
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('')}" method="post">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">活动名称<span class="must_tip"> *</span></label>
+                        <div class="layui-input-block">
+                            <input type="text" name="title" value="{$info['title']}" required  lay-verify="required" placeholder="活动名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="guding">
+                        <label class="layui-form-label">活动时间<span class="must_tip"> *</span></label>
+                        <div class="layui-inline">
+                            <div id="time1">
+                                <div class="layui-form" id="type1">
+                                    <div class="layui-form-item" style="margin-bottom:0px;">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" style="width:60px;">开始时间</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" class="layui-input" id="mall-date-sell-start" lay-ignore value="{$activity_model->getTimeTextAttr($info['begin_time'])}" name="begin_time">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" style="width:60px;">截止时间</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" class="layui-input" id="mall-date-sell-end" value="{$activity_model->getTimeTextAttr($info['end_time'])}" lay-ignore  name="end_time">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                   
+                        </div>                                   
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">活动链接<span class="must_tip"> *</span></label>
+                        <div class="layui-input-block">
+                            <input type="text" name="url" value="{$info['url']}" id="idurl" onblur="IsURL('idurl')" required  lay-verify="required" placeholder="活动链接" class="layui-input">
+                        </div>
+                    </div>
+                     <div class="layui-form-item">
+                            <label class="layui-form-label">活动图<span class="must_tip"> *</span></label>
+                            <div class="layui-input-block">
+                                <img id="imgThumb" img_view style="width:140px;height:60px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{$activity_model->getThumbTextAttr($info.images)}">
+                                <input type="hidden" name="images" value="{$info['images']}">
+                                <button type="button" id="thumb" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>上传</button> <span class="img_tip">建议上传700*300大小的图片</span>
+                            </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">排序<span class="must_tip"> *</span></label>
+                        <div class="layui-input-block">
+                            <input type="number" name="sort" value="{$info.sort}" lay-verify="required|int" placeholder="值越大，越靠前" class="layui-input">
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="{$info.id}">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-danger" data-back>返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="__JS__/ueditor/ueditor.config.js"></script>
+<script src="__JS__/ueditor/ueditor.all.min.js"></script>
+{/block}
+{block name="script"}
+{include file="html/ueditor.html" /}
+<script>
+    //活动图
+    $('#thumb').thinkupload({success: function (data) {
+        $.each(data, function (i, v) {
+            $('#imgThumb').attr('src', v.src);
+            $('input[name=images]:first').val(v.cover_id);
+            return false;
+        })
+    }});
+</script>
+<script>
+        //域名链接的合法性
+    function IsURL(id){
+        var url=$('#'+id).val();
+        var Expression=/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+        var objExp=new RegExp(Expression);
+        if(url.length>0){
+            if (objExp.test(url)){
+                return (true);
+            }else{
+                $('#'+id).focus();
+                layer.msg("链接不合法，请重新填写！");
+            }
+        }
+    }
+</script>
+<script>
+    var startDates;
+    var endDates;
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#mall-date-sell-start'
+            , type: 'datetime'
+            , done: function (value, date, endDate) {
+                startDates = value;
+                if (startDates > endDates && endDates != '') {
+                    layer.msg('结束日期应大于开始日期！');
+                    $('#mall-date-sell-start').val('');
+                    startDates = "";
+                    form.render();
+                    return false;
+                }
+            }
+        });
+        //常规用法
+        laydate.render({
+            elem: '#mall-date-sell-end'
+            , type: 'datetime'
+            , done: function (value, date, endDate) {
+                endDates = value;
+                if (endDates < startDates && startDates != '') {
+                    layer.msg('结束日期应大于开始日期！');
+                    $('#mall-date-sell-end').val('');
+                    endDates = "";
+                    form.render();
+                    return false;
+                }
+            }
+        });
+    });
+    /**
+     * 数据验证规则
+     * @type type
+     */
+    form.verify({
+        int:[/^[0-9]\d*$/,'请填写整数！']
+    });
+
+</script>
+{/block}

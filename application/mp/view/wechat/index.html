@@ -1,0 +1,117 @@
+{extend name="base" /}
+{block name="css"}
+<style>
+    .layui-elem-quote{margin:5px 10px 0px 10px !important;}
+    .layui-form{margin:5px 10px 0px 10px !important;}
+    .layui-badge {
+    height: 28px;
+    line-height: 28px;
+}
+</style>
+{/block}
+{block name='body'}
+<blockquote class="layui-elem-quote">
+    公众号详细 
+</blockquote>
+<form class="layui-form " action="">
+
+    <fieldset class="layui-elem-field">
+        <legend>授权情况</legend>
+        <div class="layui-field-box">
+            {if !empty($appid)}
+            <span class="layui-badge layui-bg-green">已授权</span> <a href="{:url('auth')}"   class="layui-btn layui-btn-primary layui-btn-sm">重新授权</a>
+            {else/}
+            <span class="layui-badge">未授权</span> <a href="{:url('auth')}"   class="layui-btn layui-btn-primary layui-btn-sm">去授权</a>
+            {/if}
+            <p class="img_tip">注：授权后自定义菜单和模板消息将被初始化。</p>
+        </div>
+    </fieldset>
+    {if !empty($appid)}
+    <fieldset class="layui-elem-field">
+        <legend>授权信息</legend>
+        <div class="layui-field-box">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>名称</legend>
+             </fieldset>
+            <p>{$wechat.nick_name}</p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>微信商户号</legend>
+             </fieldset>
+            <p>{$pay_mch_id}</p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>头像（修改公号的logo 需要重新授权）</legend>
+             </fieldset>
+            <p><img src="{$wechat['head_img']}" width="90px" height="90px" style="margin-left:10px" ></p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>二维码</legend>
+             </fieldset>
+            <p id="content">
+                 <img src="{$wechat['qrcode_local_url']}" width="90px" height="90px" style="margin-left:10px" >
+            </p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>APPID</legend>
+             </fieldset>
+            <p >
+                {$wechat['authorizer_appid']}
+            </p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>微信号</legend>
+             </fieldset>
+            <p >
+                {$wechat['user_name']}
+            </p>
+            
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>公众号类型</legend>
+             </fieldset>
+            <p >
+                 {:$self->getservice_type(json_decode($wechat['service_type_info'],true)['id'])}
+            </p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>公众号认证状态</legend>
+             </fieldset>
+            <p >
+                 {:$self->getverfy_type(json_decode($wechat['verify_type_info'],true)['id'])}
+            </p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>公众号功能开通状态</legend>
+             </fieldset>
+            <p >
+                   <?php $business_info =  json_decode($wechat['business_info'],true) ?> 
+                   <font color="green">微信门店功能【{:$self->getbusiness_info($business_info,'open_store')}】</font><br>
+                   <font color="green">微信扫商品功能【{:$self->getbusiness_info($business_info,'open_scan')}】</font><br>
+                   <font color="green">微信支付功能【{:$self->getbusiness_info($business_info,'open_pay')}】</font><br>
+                   <font color="green">微信卡券功能【{:$self->getbusiness_info($business_info,'open_card')}】</font><br>
+                   <font color="green">微信摇一摇功能【{:$self->getbusiness_info($business_info,'open_shake')}】</font><br>
+            </p>
+            
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>公众号授权集</legend>
+             </fieldset>
+            <p >
+                   <?php $func_info = json_decode($wechat['func_info'],true);foreach($func_info as $f){ ?>   
+                        <font color="green">{:$self->getfunc_info($f['funcscope_category']['id'])}</font><br>
+                   <?php } ?>
+            </p>
+        </div>
+    </fieldset>
+    {/if}
+    
+</form>
+{/block}
+
+{block name="script"}
+{include file="html/ueditor.html" /}
+<script src="__JS__/drag-arrange.js"></script>
+<script>
+
+</script>
+{/block}

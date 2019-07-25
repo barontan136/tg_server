@@ -1,0 +1,55 @@
+{extend name="base" /}
+{block name="title"}绑定微信管理员{/block}
+{block name="body"}
+<div class="weui-msg">
+    <div class="weui-msg__icon-area"><img src="{$wxUser.headimgurl}" style="width: 70px;border-radius: 50%"></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">{$wxUser.nickname}</h2>
+        <p class="weui-msg__desc">尊敬的：{$wxUser.nickname}，【{$merchant.name}】 邀请您绑定微信管理员，是否同意？</p>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="javascript:;" id="agree" class="weui-btn weui-btn_primary" >同意绑定</a>
+            <a href="javascript:" id="notagree" class="weui-btn weui-btn_default">不同意绑定</a>
+        </p>
+    </div>
+    <div class="weui-msg__extra-area">
+        <div class="weui-footer">
+            <p class="weui-footer__links">
+                <a href="javascript:void(0);" class="weui-footer__link">{:config('site_title')}</a>
+            </p>
+            <p class="weui-footer__text">Copyright &copy; 2018 {:config('site_title')}</p>
+        </div>
+    </div>
+</div>
+
+<div id="toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast" style="height: auto;min-height: 0px">
+        <p class="weui-toast__content" style="margin:5px auto;"></p>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    $('#notagree').click(function () {
+        closeWx();
+    })
+    $('#agree').click(function () {
+        var loading = weui.loading('绑定中...')
+        $.post('{:url()}', {merchant_id: '{$merchant.id}'}, function (d) {
+            loading.hide();
+            weui.toast(d.msg, {
+                callback: function () {
+                    if (d.code == 1) {
+                        closeWx();
+                    }
+                }
+            });
+        }, 'JSON')
+    })
+    function closeWx() {
+        WeixinJSBridge.call('closeWindow');
+    }
+</script>
+{/block}

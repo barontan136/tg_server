@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <meta name="keywords" content="">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <title>{:config('site_title')}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <style>
+             //掩藏滚动条
+            ::-webkit-scrollbar {display:none}
+            ::-webkit-scrollbar{width:0px}
+        </style>
+        <link rel="stylesheet" href="__JS__/layui/css/layui.css" media="all">
+        <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+        <!--CSS引用-->
+        {block name="css"}{/block}
+        <!--<link rel="stylesheet" href="__CSS__/global.css">-->
+        <style>.layui-btn {background-color: #fc9503;color: #fafafa;}</style>
+        <link rel="stylesheet" href="__CSS__/admin.css">
+        <link rel="stylesheet" href="__STATIC__/wechat_theme/css/admin_base.css">
+        <link rel="stylesheet" href="__STATIC__/wechat_theme/css/icon.css">
+        <link rel="stylesheet" href="__CSS__/animate.css" media="all">
+        <style>
+            .layui-body { position: relative;left: 0}
+            dd, dt {line-height: 34px}
+            .layui-nav .layui-nav-item {line-height: 37px; }
+            .layui-nav-child {z-index: 10000;top:32px}
+            .layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+                background-color:transparent; 
+            }
+            .img_tip {color: #999;margin-left: 0px !important}
+            .menu dl dt a {color: rgb(141, 141, 141);}
+            .topbar li { padding: 2px 10px; }
+            .topbar ul {height: 30px}
+            .layui-nav .layui-nav-item {line-height: 30px;height: 30px}
+            .layui-nav .layui-nav-more {top: 13px;}
+            .layui-elem-quote {margin-bottom:10px !important;}
+            .layui-elem-quote form div.layui-inline {padding: 5px;}
+            .layui-elem-quote{    border-left: 5px solid #fc9503;}
+            .layui-tab-brief>.layui-tab-title .layui-this {color: #fc9503;}
+            .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after { border-bottom: 2px solid #fc9503;}
+            .layui-table td, .layui-table th {
+                position: relative;
+                padding: 5px 10px;
+                min-height: 15px;
+                line-height: 15px;
+                font-size: 12px;
+            }
+            .layui-elem-quote {
+                background-color: #fff;
+            }
+            .pagination li.active {
+                background: #fc9503;
+                color: #fff;
+                border: 1px solid #fc9503;
+            }
+            .pagination li {
+                width: auto !important;
+                min-width: 30px !important
+            }
+            .layui-nav * {font-size: 12px;}
+            .layui-nav .layui-nav-item a{padding: 0px;color:#000}
+            .layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a {
+                color: #000;
+            }
+            .layui-elem-field legend{font-size: 14px}
+            .form-container {
+                max-width: 1100px; 
+            }
+            .layui-btn-normal {background: #fc9605;}
+            .layui-form-label{width:12%}
+            .layui-input-block { margin-left: 159px;}
+            .layui-form-radio>i:hover, .layui-form-radioed>i {color: #fb9605;}
+            .layui-form-onswitch {border-color: #fb9605;background-color: #fb9605;}
+            .layui-bg-green {background-color: #fb9605!important;}
+            .layui-tab-title .layui-this {color:  #fb9605!important;}
+            .layui-form-select dl dd.layui-this {background-color: #fc9503;}
+            .layui-tab-title .layui-this:after {border: 1px solid #fc9605; border-bottom-color: #eee;}
+            .layui-tab-title {border-bottom-color: #fc9605;}
+            .layui-tab-brief>.layui-tab-title{ border-bottom-color:#eee;}
+            table tr{cursor: pointer}
+            .layui-form-checked[lay-skin=primary] i {border-color: #fb9503; background-color: #fb9503;}
+            .layui-form-checked i, .layui-form-checked:hover i {color: #f99605;}
+            .layui-form-checked span, .layui-form-checked:hover span {background-color: #fa9605;}
+            .layui-form-checked, .layui-form-checked:hover {border-color: #f99605;}
+            /**素材库相关**/
+            #news_box .news_item {width:170px !important;border-radius: 5px !important;}
+            #news_box .news_tools{background: #eee !important;width:175px !important;margin-left:0px !important;top:2px !important}
+            .news_box_title1 {background-color: #eeeeee !important}
+            #news_box .news_tools a{color:#333 !important;}
+            #news_box .news_item .news_articel_item p div i{top:0px !important}
+            .cur {background: #fb9503 !important}
+            .pagination {margin: 10px;text-align: center}
+            /*confirm弹框的确定按钮 start*/
+             .layui-layer-btn .layui-layer-btn0 {border-color: #fc9503 !important;background-color: #fc9503 !important;}
+            /*confirm弹框的确定按钮 end*/
+        </style>
+        <script>
+            var Lawnson = {};
+            Lawnson.site_title = "{:config('site_title')}"
+        </script>
+        <!--[if lt IE 9]>
+        <script src="__CSS__/html5shiv.min.js"></script>
+        <script src="__CSS__/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="trade-order">
+        <div class="topbar" id="gotop">
+            <div class="wrap" style="height:30px">
+                <ul class="layui-nav top_menu" style="background-color:#eee">
+                    <li class="layui-nav-item " pc>
+                        <a href="javascript:" style="padding-right:50px">您好，<cite>{:session('merch_admin_name')}</cite></a>
+                    </li>
+                    {if config('app_debug')}
+<!--                    <li class="layui-nav-item " pc>
+                        <a href="{:url('publics/_log')}"><i class="fa fa-bug"></i> <cite>调试日志</cite></a>
+                    </li>
+                    <li class="layui-nav-item " pc>
+                        <a href="{:WEB_PATH}/apidoc" target="_blank"><i class="fa fa-bug"></i> <cite>API文档</cite></a>
+                    </li>-->
+                    {/if}
+                    <!--<li class="layui-nav-item" pc>-->
+                        <!--<a href="{:url('publics/userInfo')}"><i class="fa fa-user"></i> <cite>个人资料</cite></a>-->
+                    <!--</li>-->
+                    <!--<li class="layui-nav-item" pc>-->
+                        <!--<a href="{:url('publics/updatePassword')}"><i class="fa fa-cog"></i> <cite>修改密码</cite></a>-->
+                    <!--</li>-->
+                    <li class="layui-nav-item" pc>
+                        <a href="javascript:" onclick="loginout()" class="noAddTab"><i class="fa fa-power-off"></i>
+                            <cite>退出</cite></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="header">
+            <div class="wrap" style="background:#fff;width:100%;text-align: center">
+                <div class="nav" style="float:none">
+                    <ul>
+                        <li style="display:inline;margin-right: 25px"><img src="__IMAGES__/logo.png" height="45px" style="vertical-align: middle;padding-bottom: 3px;"><span style="font-size: 20px;margin-left: 10px;vertical-align: middle;color: #999">{:config('site_title')}商户端</span></li>
+                        {volist name="mainMenu" id="t"}
+                        <li class="{if $currentTag == $t.title}selected{/if}"><a href="{:url($t['name'])}">{$t.title}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container_body wrap animated fadeIn">
+            {if $notshowleftmenu == 'show'}
+            <div class="sidebar">
+                <div class="menu">
+                    {volist name="menu" id="t"}
+                    <dl>
+                        {if !isset($t['children'])}
+                        <dt class="{if $currentMenu == $t.name}selected{/if}"><a  class="data-menu-dd" href="{:url($t['name'])}"><i class="type-ico ico-trade {$t.icon}" style="font-size:16px"></i>{$t.title}</a></dt>
+                        {else}
+                        <dt><i class="type-ico ico-trade {$t.icon}" style="font-size:16px"></i>{$t.title}</dt>
+                        {volist name="$t['children']" id="c"}
+                        <dd class="{if $currentMenu == $c.name}selected{/if}">
+                            <a  class="data-menu-dd" href="{:url($c['name'])}">{$c.title}</a></dd>
+                        {/volist}
+                        {/if}
+                    </dl>
+                    {/volist}
+
+                </div>
+            </div>
+            {/if}
+            <!--<div class="sidebar" style="width:5px;background: #e7e8eb"></div>-->
+            <div class="content" id="tradeSearchBd" {if $notshowleftmenu=='hide'}style="width:1200px !important"{/if}>
+                {block name="body"}{/block}
+            </div>
+        </div>
+        <div class="footer animated fadeInUp" >
+            <div class="wrap">
+                <!--请遵守安装使用协议，未经允许不得删除或者屏蔽有关RhaPHP字样-->
+                Powered By {:config('site_copyright')} Copyright © 2018 All Rights Reserved.
+            </div>
+        </div>
+    </body>
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__JS__/layui/layui.all.js"></script>
+    <script src="__JS__/mp.js"></script>
+    <script>
+        function loginout() {
+            window.sessionStorage.setItem("data-menu-url", null);
+            location.href = "{:url('login/logout')}"
+        }
+        //禁用input type=number 鼠标滚轮事件
+        if (navigator.userAgent.indexOf("Firefox") > -1) {
+            //火狐浏览器
+            $.each($("input[type='number']"),function(){
+                $(this)[0].addEventListener('DOMMouseScroll', function (event) {
+                    event = event || window.event;
+                    event.preventDefault();
+                }, false);
+            });
+        }else{
+            //其他浏览器
+            $("input[type='number']").attr('onmousewheel','return false;');
+        }
+        $('[data-form-parent]').css('min-height','300px');
+    </script>
+    <style>
+        .layui-laydate .layui-this {background-color: #fc9605!important;}
+    </style>
+    {block name="js"}{/block}
+    <!--页面JS脚本-->
+    {block name="script"} {/block}
+    <!--导航高亮-->
+</html>

@@ -1,0 +1,81 @@
+{extend name="base" /}
+
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">门店列表</li>
+        </ul>
+        <div class="layui-tab-content" >
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get" id="search">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name/like" value="{$name|default=''}" placeholder="--名称--" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">负责人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="contact_name/like" value="{$contact_name|default=''}" placeholder="--负责人--" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="contact_phone/like" value="{$contact_phone|default=''}" placeholder="--联系电话--" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>搜索</button>
+                    </div>
+                </form>
+            </blockquote>
+            <div class="layui-tab-item layui-show" data-form-parent>
+                {include file="merchant/index_ajax" /}
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    substring('configleng', 20)
+    form.on('radio(is_leader)', function (obj) {
+        var flag = true;
+        var arr = new Array();
+        var va = obj.value;
+        arr = va.split("-");
+        var id = arr[0];
+        var name = arr[1];
+        if (arr[2] != 1) {
+            layer.msg("门店为已删除状态，不能设置为主门店！");
+            location.reload(true);
+            return;
+        }
+        layer.confirm("确定要将" + name + "设置为主门店！", {icon: 3, title: '提示'}, function (index) {
+            $.ajax({
+                url: "{:url('updateLeaderShop')}",
+                datatype: "json",
+                type: "post",
+                data: {id: id},
+                success: function (data) {
+                    layer.msg(data.msg);
+                    location.reload(true);
+                },
+                error: function () {
+                    layer.alert("未知错误！");
+                }
+            });
+            layer.close(index);
+        }, function () {
+            location.reload(true);
+        }
+        );
+
+    })
+</script>
+{/block}

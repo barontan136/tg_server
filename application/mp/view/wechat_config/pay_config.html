@@ -1,0 +1,66 @@
+{extend name="base" /}
+{block name="body"}
+<style>
+    .w70{
+        width: 70% !important
+    }
+</style>
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">支付参数设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('pay_config')}" method="post">
+                    <input type="hidden" name ="id" value="{$info.id|default=''}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">支付参数</label>
+                        <div class="layui-input-inline w70" style="margin-top: 8px;">
+                            <span class="must_tip" style="font-size:20px;"> 请勿随意修改参数，可能会导致无法进行支付等问题</span>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>公众号appid</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="appid" value="{$info.appid|default=''}"lay-verify="required"    placeholder="公众号appid" autocomplete="off" class="layui-input">
+                            <!--<span class=''>活动未开始时的提醒</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>公众号secret</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="secret" value="{$info.secret|default=''}" lay-verify="required"   placeholder="公众号secret" autocomplete="off" class="layui-input">
+                            <!--<span class=''>活动已结束时的提醒</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>支付商户michid</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="michid" value="{$info.michid|default=''}" lay-verify="required"   placeholder="支付商户michid" autocomplete="off" class="layui-input">
+                            <!--<span class=''>活动已结束时的提醒</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>支付apidkey</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="pay_apikey" value="{$info.pay_apikey|default=''}" lay-verify="required"    placeholder="支付apidkey" autocomplete="off" class="layui-input">
+                            <!--<span class=''>活动已结束时的提醒</span>-->
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

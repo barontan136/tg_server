@@ -1,0 +1,79 @@
+/*后台主框架自定义样式*/
+body{
+    background-color: #f2f2f2
+}
+.layui-layout-admin .layui-main {
+    width: 1220px;
+    margin: 0 auto;
+}
+.ls_main {
+    padding: 36px 0 88px;
+    width: 1220px;
+    height: 100%;
+    position: relative;
+    margin-left: -610px;
+    left: 50%;
+}
+.layui-layout-admin .layui-body {
+    top: 20px;
+    margin-left: 10px;
+    height: auto;
+}
+.layui-layout-admin .layui-side {
+    top: -18px;
+    border-radius: 6px;
+    position: relative;
+    padding-bottom: 50px;
+}
+.layui-body {
+    overflow: hidden;
+    border:none;
+    border-top: 4px solid #23262e;
+}
+.layui-layout-admin .layui-footer {
+    left: 0px; 
+    width: 100%;
+    z-index: 999
+}
+.layui-header {
+    height: 30px;
+}
+.logo {
+    line-height: 30px;
+}
+.weather {
+    margin: 0px
+}
+.layui-nav .layui-nav-item {
+    line-height: 30px;
+}
+.layui-nav * {
+    font-size: 12px;
+}
+.layui-img{
+    width:25px;
+    height:25px;
+}
+.layui-nav-child {
+    top: 35px;
+}
+.top_menu .layui-nav-bar{top:30px !important;}
+.layui-nav .layui-nav-more{top:12px;}
+.layui-tab-title li {
+    font-size: 12px;
+    line-height: 30px;
+}
+#top_tabs_box {
+    height: 30px;
+    background-color: #fff
+}
+.logo {
+    font-size: 17px;
+}
+.closeBox .layui-nav-child {
+    top: 33px;
+}
+.layui-tab-title .layui-this {
+    background-color: #23262e;
+    color: #fff;
+}

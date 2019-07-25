@@ -1,0 +1,66 @@
+<form action="" method="post" class="ajax-form layui-form">
+
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {volist name='list' id='vo'}
+            <tr>
+                <td>{$vo['id']}</td>
+                <td>{$vo['name']}</td>
+                <td>{$vo['keyword']}</td>
+                <td>{$vo['is_subscribe_text']}</td>
+                <td>{$vo['begin_time_date']}</td>
+                <td>{$vo['end_time_date']}</td>
+                <td>{$vo['status_text']}</td>
+                <td>{$vo['number']}</td>
+                <td>
+                    {switch name="vo.type"}
+                    {case value="-1"}{/case}
+                    {case value="1"}
+                    <a data-url="{:url('ActivityTurntable/detail',['id'=>$vo.from_id])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> �� ��
+                    </a>
+                    {/case}
+                    {case value="2"}
+
+                    <a data-url="{:url('ActivityBargain/detail',['id'=>$vo.from_id])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> �� ��
+                    </a>
+                    {/case}
+                    {case value="3"}
+
+                    <a data-url="{:url('ActivitySpike/detail',['id'=>$vo.from_id])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> �� ��
+                    </a>
+                    {/case}
+                    {default /}����ʹ���
+                    {/switch}
+                    
+                    {if condition="$vo.time eq 1"}
+                    <button data-action="{:url('Activity/over',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs ajax-action">ǿ�ƽ���</button>
+                    {/if}
+                    {if condition="$vo.time eq 2"}
+                    <button data-action="{:url('Activity/delete',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs ajax-action">
+                        ɾ��
+                    </button>
+                    {/if}
+                    
+                </td>
+            </tr>
+            {/volist}
+        </tbody>
+    </table>
+    {$page}
+</form>

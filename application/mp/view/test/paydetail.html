@@ -1,0 +1,286 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+    .layui-form-pane .layui-form-label {
+        width: 150px;
+    }
+    .layui-form-item .layui-input-inline {
+        width: 250px;
+    }
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">订单详情</li>
+        </ul>
+        <div class="layui-tab-content">
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>订单商品</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" value="{//$info['goods_name']}" class="layui-input" disabled>
+                            </div>
+                            <label class="layui-form-label">商品编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['amount']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品单价</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['bouns']}" disabled>
+                            </div>
+                            <label class="layui-form-label">购买数量</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="自提" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">下单时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['create_time']}" disabled>
+                            </div>
+                            <label class="layui-form-label">订单来源</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['create_time']}" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">购买规格</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['create_time']}" disabled>
+                            </div>
+                            <label class="layui-form-label">配送方式</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['create_time']}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>支付明细</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">订单编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['id']}" disabled>
+                            </div>
+                            <label class="layui-form-label">订单状态</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['bouns']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">支付金额</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['id']}" disabled>
+                            </div>
+                            <label class="layui-form-label">优惠金额</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['bouns']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">支付情况</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['id']}" disabled>
+                            </div>
+                            <label class="layui-form-label">扣除积分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['bouns']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">赠送积分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['id']}" disabled>
+                            </div>
+                            <label class="layui-form-label">优惠券</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['bouns']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">支付邮费</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['id']}" disabled>
+                            </div>
+                        </div>    
+                    </form>
+
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>用户信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane">
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['customer_name']}" disabled>
+                            </div>
+                            <label class="layui-form-label">用户电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['telephone']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">发票抬头</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['customer_name']}" disabled>
+                            </div>
+                            <label class="layui-form-label">纳税识别号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['telephone']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">订单留言</label>
+                            <div class="layui-input-inline">
+                                <textarea class="layui-textarea">xxx</textarea>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>物流信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">收件人姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['customer_name']}" disabled>
+                            </div>
+                            <label class="layui-form-label">收件人电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['telephone']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">快递单号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['customer_name']}" disabled>
+                            </div>
+                            <label class="layui-form-label">快递公司</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['telephone']}" disabled>
+                            </div>
+                        </div>    
+                        
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">收件地址</label>
+                            <div class="layui-input-block">
+                                <textarea class="layui-textarea">xxx</textarea>
+                            </div>
+                        </div>    
+                    </form>
+                    
+                    <form class="layui-form layui-form-pane" action="{:url('changeStatu')}" method="post">
+                        <input type='hidden' name='status' value="2">
+                        <input type='hidden' name='ids[]' value="{//$info['id']}">
+                        <button class="layui-btn" lay-submit lay-filter="*">确认发货</button>
+                    </form>
+                    <button class="layui-btn layui-btn-disabled">已发货</button>
+                    
+                </div>
+            </fieldset>
+            
+            
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>自提信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自提状态</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['status_text']}" disabled>
+                            </div>
+                            <label class="layui-form-label">自提时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['pick_up_time']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">提货码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['take_code']}" disabled>
+                            </div>
+                            <label class="layui-form-label">提货有效期至</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['valid_date']}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                    
+                     <form class="layui-form layui-form-pane" action="{:url('changeStatu')}" method="post">
+                        <input type='hidden' name='status' value="2">
+                        <input type='hidden' name='ids[]' value="{//$info['id']}">
+                        <button class="layui-btn" lay-submit lay-filter="*">确认发货</button>
+                    </form>
+                    <button class="layui-btn layui-btn-disabled">已发货</button>
+                </div>
+            </fieldset>
+            
+            
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>自提信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自提状态</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['status_text']}" disabled>
+                            </div>
+                            <label class="layui-form-label">自提时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['pick_up_time']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">提货码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['take_code']}" disabled>
+                            </div>
+                            <label class="layui-form-label">提货有效期至</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{//$info['valid_date']}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                    
+                     <form class="layui-form layui-form-pane" action="{:url('changeStatu')}" method="post">
+                        <input type='hidden' name='status' value="2">
+                        <input type='hidden' name='ids[]' value="{//$info['id']}">
+                        <button class="layui-btn" lay-submit lay-filter="*">确认发货</button>
+                    </form>
+                    <button class="layui-btn layui-btn-disabled">已发货</button>
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+
+    substring('good_name', 10);
+
+</script>
+{/block}

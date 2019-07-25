@@ -1,0 +1,136 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">线上退款查询</li>
+        </ul>
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get" id="search">
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">下单时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" name="order_time" value="{$order_time|default=''}" id="order_time" placeholder=" - ">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">姓名/电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name/like" value="{$name|default=''}" placeholder="请输入名称" class="layui-input">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="id/like" value="{$id|default=''}" placeholder="请输入名称" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>查询</button>
+                    </div>
+
+                </form>
+
+            </blockquote>
+            <!--<button type="button" class="layui-btn  layui-btn-sm " data-url="{:url('export')}"title="导出"><i class="fa fa-folder-o" aria-hidden="true"></i>导出</button>-->
+            <!--黑色分割线 start-->
+            <hr class="layui-bg-black">
+            <!--黑色分割线 end-->
+            共计退回积分：xxxxx
+            <div class="layui-tab-content" style="height: 500px;" id="wrap">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th>下单时间</th>
+                            <th>用户姓名</th>
+                            <th>电话</th>
+                            <th>订单编号</th>
+                            <th>退款原因</th>
+                            <th>退款金额</th>
+                            <th>支付时间</th>
+                            <th>退款时间</th>
+                            <th>退回积分</th>
+                            <th>收回积分</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {notempty name="list"}
+                        {volist name="list" id ="vo"}
+                        <tr>
+                            <td>{//$vo['create_time']}</td>
+                            <td>{//$vo['customer_name']}</td>
+                            <td>{//$vo['telephone']}</td>
+                            <td>{//$vo['number']}</td>
+                            <td></td>
+                            <td>{//$vo['money']}</td>
+                            <td>{//$vo['pay_time']}</td>
+                            <td></td>
+                            <td>{//$vo['use_bonus']}</td>
+                            <td>{//$vo['get_bonus']}</td>
+                            <td>
+                                <a data-url="{:url('canceldetail')}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 查看详情
+                                </a>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="11" style="text-align: center">暂无数据~</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!--分页-->
+                {//$list->render()}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+    substring('good_name', 10);
+
+    //日期范围
+    laydate.render({
+        elem: '#order_time'
+        , range: true
+    });
+    
+    $(document).on('click', '.pagination a', function () {
+        var url = $(this).attr('href');
+        $.ajax({
+            type: 'get',
+            url: url,
+            data: $("#search").serialize(),
+            success: function (data) {
+                $('#wrap').html(data);
+                form.render();
+            }
+        });
+        return false;
+    });
+    
+    $(document).on('click', '.iframe-edit', function () {
+        var _this = $(this);
+        location.href = _this.attr('data-url');
+    });
+    
+</script>
+{/block}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>用户登录</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <link rel="stylesheet" href="__JS__/layui/css/layui.css" media="all">
+        <link rel="stylesheet" href="__CSS__/animate.css" media="all">
+        <link rel="stylesheet" href="__STATIC__/lawnson/css/weui.min.css" media="all">
+        <style>
+            body{background-color: #eee}
+            .left{ width: 50%;height: 100vh;float: left;text-align: right}
+            .left img{margin-top:43vh;}
+            .right{width: 50%;height: 100%;float: right;}
+            .right .content{max-width:340px;padding: 10px;background: #fff;border-radius: 5px;margin:100px 0px 0px 0px;min-height:520px;}
+            .logo{width: 100%;text-align: center;font-size: 20px;font-weight: bold;height: 50px;line-height: 50px;padding: 20px 0}
+            .right li{width: 49%;padding: 0px}
+            .layui-tab-brief>.layui-tab-title .layui-this {color: #fc9503;}
+            .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after {border-bottom: 2px solid #fc9503;}
+            .layui-btn-fluid{margin-top:50px;font-size: 18px;height: 50px;line-height: 50px;color: #fff;background-color: #fc9503}
+            .layui-form-label {text-align: left}
+            .layui-input, .layui-input:hover {height: 50px;line-height: 50px;border: none;border-bottom: 1px #fc9503 solid !important;}
+            .layui-input-block{margin-left: 0px}
+            .layui-btn{box-shadow: 5px 2px 10px #fc9503;}
+            .qrcode-parent{padding: 10px;text-align: center}
+            canvas{border-radius: 4px}
+            .p-title{margin-bottom: 10px;color: #ccc;font-size: 13px}
+            .p-notice{margin-top:10px;display: none}
+            .p-notice i{font-size: 16px}
+            .wrap{    width: 100%;position: absolute;top:700px;text-align: center;color: #b2b2b2;}
+        </style>
+    </head>
+    <body>
+        <div class="left">
+            <img class="animated bounceInLeft" src="__IMAGES__/left.png">
+        </div>
+        <div class="right">
+            <div class="content animated bounceInRight">
+                <div class="logo">{:config('site_title')}活动后台管理</div>
+                <hr class="layui-bg-gray">
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">账号密码登录</li>
+                    </ul>
+                    <div class="layui-tab-content" style="height: 100px;">
+                        <div class="layui-tab-item layui-show">
+                            <form action="{:url('mp/login/login')}" method="post" class="layui-form">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                        <i class="layui-icon" style="font-size: 30px; color: #ccc;">&#xe66f;</i>  
+                                    </label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="username"  lay-verify="required" placeholder="请输入登录用户名" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                         <i class="layui-icon" style="font-size: 30px; color: #ccc;">&#xe673;</i>  
+                                    </label>
+                                    <div class="layui-input-block">
+                                        <input type="password" name="password" required lay-verify="required" placeholder="请输入登录密码" class="layui-input">
+                                    </div>
+                                </div>
+                                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="*">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="wrap animated bounceInUp">
+                <!--请遵守安装使用协议，未经允许不得删除或者屏蔽有关RhaPHP字样-->
+                Powered By {:config('site_copyright')} Copyright © 2019 All Rights Reserved.
+            </div>
+        <script src="__JS__/jquery.min.js"></script>
+        <script src="__JS__/layui/layui.all.js"></script>
+        <script src="__JS__/mp.js"></script>
+        <script>
+            $(document).keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $("[lay-submit]").trigger("click");
+                }
+            });
+
+        </script>
+    </body>
+</html>

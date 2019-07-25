@@ -1,0 +1,40 @@
+<form action="" method="post" class="ajax-form layui-form">
+
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>微信</th>
+                <th>来源</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {notempty name='list'}
+            {volist name='list' id='vo' key='k'}
+            <tr>
+                <td>{$k}</td>
+                <td>
+                    <img src="{$vo.head_img}" width="28"/>
+                    <br/>{$vo.nick_name}
+                </td>
+                <td>
+                    <img src="{$vo.ref_head_img}" width="28"/>
+                    <br/>{$vo.ref_nick_name}
+                </td>
+                <td>{$vo.create_datetime}</td>
+                <td>
+                    <button type="button" data-action="{:url('ActivityData/deleteVisitRecord',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs ajax-action">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name='list'}
+    {$list->render()}
+    {/notempty}
+</form>

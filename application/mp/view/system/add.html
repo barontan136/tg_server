@@ -1,0 +1,100 @@
+{extend name="base" /}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('')}" method="post">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-block">
+                            <select name="type" lay-filter="type">
+                            <option value="1" selected="">输入框</option>
+                            <option value="2">选择框</option>
+                            <option value="3">数组</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">配置名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="title" value="" required  lay-verify="required" placeholder="请输入配置名称,如:微信APPID" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">配置常量</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" value="" required  lay-verify="required" placeholder="请输入配置常量 如：wechat_appid" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="extra" style="display: none">
+                        <label class="layui-form-label">候选值配置</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="格式为: key:value" name="extra" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">分组</label>
+                        <div class="layui-input-block">
+                            {volist name="group" id="vo"}
+                            <input type="radio" name="group" value="{$vo}" title="{$vo}">
+                            {/volist}
+                            <a class="layui-btn layui-btn-xs" id="newGroup"><i class="layui-icon"></i></a>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">配置值</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="配置值" name="value" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">配置说明</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="配置说明" name="remark" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">排序</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="sort" value="0" required  lay-verify="required" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-danger give-jst-update" data-back>返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+//新加分组
+   $('#newGroup').unbind('click').click(function(){
+       var that = $(this);
+       //prompt层
+        layer.prompt({title: '新加分组', formType: 0,anim:2,offset:that.offset().top,icon:3}, function(value, index){
+          layer.close(index);
+          that.parent('.layui-input-block').find('radio').removeAttr('checked');
+          var html = '<input type="radio" name="group" value="'+value+'" checked title="'+value+'">'
+           that.before(html); 
+           form.render('radio')
+        }); 
+   })
+   //监听类型选择
+   form.on('select(type)',function(data){
+       var val = data.value;
+       if(val==1||val==3){
+           $('#extra').hide();
+       }else{
+            $('#extra').show();
+       }
+   })
+</script>
+{/block}

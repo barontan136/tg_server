@@ -1,0 +1,145 @@
+{extend name="wechat" /}
+{block name="css"}
+<link rel="stylesheet" href="__CSS__/bootstrap.min.css">
+<link rel="stylesheet" href="__CSS__/wechat.css">
+<style>
+    body { min-width: 500px}
+    #push-tags{height:300px;overflow:auto}
+    .bottom-btn { display: block; background: #F7F7F7; padding: 10px; bottom: 0; width: 100%}
+    .list-container { width: 100%; padding-right: 8px; padding-left: 0}
+    .list-container h5 a { font-size: 12px; float: right}
+    .list-container .list-item { border: 1px solid #eee; padding: 8px}
+    .list-container .list-item:after { content: ''; display: block; clear: both; width: 100%}
+    .list-container .list-item label { display: block; width: 25%; float: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+    .news-container .news-box { border: 1px solid #eee; padding: 8px}
+    .news-container .news-box hr { margin: 4px}
+    .news-container .news-box .news-item { position: relative; border: 1px solid #cecece; border-radius: 2px; overflow: hidden; cursor: pointer}
+    .news-container .news-box .news-image {background-position:center center;background-size:100%;height:90px}
+    .news-container .news-box .news-title { position: absolute; background: rgba(0, 0, 0, 0.5); color: #fff; padding: 2px; margin: 0; bottom: 0; left: 0; right: 0; text-align: right; white-space: nowrap; text-overflow: ellipsis; overflow: hidden}
+    .left-image{width:50px;height:50px;position:relative;float:right;background-position:center center;background-size:100%;overflow:hidden;}
+    .right-text{float:left;width:100px;padding-right:10px;overflow:hidden;text-overflow:ellipsis;}
+    hr {margin-top:10px; margin-bottom: 10px; }
+</style>
+{/block}
+{block name="body"}
+ <script src="__JS__/template.js"></script>
+ <form data-auto='true' class="form-inline"  method="post">     
+      <div class="col-xs-2 list-container">
+        <h5 class="text-center" style="margin:10px 0">选择微信管理员</h5>
+        <div style="padding:10px">
+         <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">请输入微信昵称</label>
+            <input type="text" class="form-control" id="nickname" placeholder="请输入微信昵称">
+          </div>
+            <button type="button" class="btn btn-primary mb-2" onclick="searchBynickname()">查询</button>
+          </div>
+        <div class="list-item">
+            {literal}
+            <script id="push" type="text/template">
+                {{if data}}
+                {{each data as value key}}
+                {{if key <= 200}}
+                        <label><input type='radio' data-nickname={{value.nickname}} data-headimgurl={{value.headimgurl}} data-openid={{value.openid}} name="user" value={{value.id}}> <img src={{value.headimgurl}} width='20'> {{value.nickname}}</label>
+                {{/if}}
+                {{/each}}
+                {{if (data.length > 200)}}
+                <label>...</label>
+                {{/if}}
+                {{else}}
+                <h5></h5>
+                {{/if}}
+            </script>
+            {/literal}
+        </div>
+        <div id='push-tags' class="list-item"></div>
+    </div>
+     
+     
+    <div style="clear:both;"></div>
+
+    <div class="bottom-btn text-center">
+        <button class="btn btn-primary" type="button" onclick="setOpenid()">确定</button>
+        <button class="btn btn-danger" type="button" onclick="unsetOpenid()">不设置微信管理员</button>
+    </div>
+
+</form>
+{/block}
+{block name="script"}
+<script>
+       var $allbtn = $('[data-check-all]').on('click', function () {
+                var check_status = check_checked();
+                /*重置和全选数据变化处理*/
+                $('input[name*=fans_tags]').map(function () {
+                    this.checked = !check_status;
+                });
+                check_checked();
+                postpush();
+            });
+            /*重置和全选的效果处理*/
+            function check_checked() {
+                var allcheck = true;
+                $('input[name*=fans_tags]').map(function () {
+                    (!this.checked) && (allcheck = false);
+                });
+                return ((allcheck) ? $allbtn.html('重置') : $allbtn.html('全选')), allcheck;
+            }
+
+            /*点击每一个选项都触发事件*/
+            $('input[name*=fans_tags]').on('click', function () {
+                check_checked();
+                postpush();
+            });
+            /*数据异步获取并显示出来*/
+            function postpush() {
+                var inp = $('input[name*=fans_tags]');
+                var group = [];
+                for (var i = 0; i < inp.length; i++) {
+                    if (inp[i].checked === true) {
+                        group.push(inp[i].value);
+                    }
+                }
+                $.post("{:url('')}?action=getuser", {group: group.join(',')}, function (ret) {
+                    var html = template('push', ret);
+                    document.getElementById('push-tags').innerHTML = html;
+                });
+            }
+            //按昵称查找
+            function searchBynickname() {
+                $.post("{:url('')}?action=nickname", {nickname:$('#nickname').val()}, function (ret) {
+                    var html = template('push', ret);
+                    document.getElementById('push-tags').innerHTML = html;
+                });
+            }
+            //设置微信用户
+            function setOpenid(){
+                var user = $('input[name=user]:checked');
+                if(user.length==0){
+                    layer.msg('请选择用户')
+                    return;
+                }else{
+                    parent.$('#headimgurlimg').attr('src',user.data('headimgurl'));
+                    parent.$('#nicknamep').text(user.data('nickname'));
+                    parent.$('#nickname').val(user.data('nickname'));
+                    parent.$('#headimgurl').val(user.data('headimgurl'));
+                    parent.$('#openid').val(user.data('openid'));
+                    parent.$('#openid').parent().show();
+                    parent.layer.close(parent.window.wechant_user_index);
+                }
+            }
+            //取消设置微信用户
+            function unsetOpenid(){
+                    parent.$('#headimgurlimg').attr('src','');
+                    parent.$('#nicknamep').text('');
+                    parent.$('#nickname').val('');
+                    parent.$('#headimgurl').val('');
+                    parent.$('#openid').val('');
+                    parent.$('#openid').parent().hide();
+                    parent.layer.close(parent.window.wechant_user_index);
+            }
+            //首次加载所有数据
+             $.post("{:url('')}?action=all", {}, function (ret) {
+                    var html = template('push', ret);
+                    document.getElementById('push-tags').innerHTML = html;
+                });
+    </script>
+{/block}

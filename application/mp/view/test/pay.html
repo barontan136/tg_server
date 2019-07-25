@@ -1,0 +1,182 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">线上支付查询</li>
+        </ul>
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get" id="search">
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">下单时间</label>
+                        <div class="layui-input-inline" style="float:left;" >
+                            <input type="text" class="layui-input" name="start_time" value="{$start_time|default=''}" id="start_time" placeholder="起始时间"> 
+                        </div>
+                        <label class="layui-form-label" style="border:none;background: #f2f2f2;width: 45px;">至</label>
+                        <div class="layui-input-inline" >
+                            <input  type="text" class="layui-input" name="end_time" value="{$end_time|default=''}" id="end_time" placeholder="结束时间">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">姓名/电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name/like" value="{$name|default=''}" placeholder="请输入名称" class="layui-input">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="id/like" value="{$id|default=''}" placeholder="请输入名称" class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-inline">
+                    <label class="layui-form-label">付款状态</label>
+                    <div class="layui-input-block">
+                        <select name="status" lay-filter="aihao">
+                            <option value="">全部</option>
+                            <option value="-1" {$status==-1?'selected':''}>订单无效</option>
+                            <option value="1" {$status==1?'selected':''}>已下单，未付款</option>
+                            <option value="2" {$status==2?'selected':''}>已付款</option>
+                            <option value="3" {$status==3?'selected':''}>待发货</option>
+                            <option value="4" {$status==4?'selected':''}>待确认</option>
+                            <option value="5" {$status==5?'selected':''}>待评价</option>
+                            <option value="6" {$status==6?'selected':''}>订单完成</option>
+                            <option value="7" {$status==7?'selected':''}>申请退款</option>
+                            <option value="8" {$status==8?'selected':''}>退款中</option>
+                            <option value="9" {$status==9?'selected':''}>退款完成</option>
+                        </select>
+                    </div>
+                </div>
+                    
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>查询</button>
+                    </div>
+
+                </form>
+
+            </blockquote>
+            <!--<button type="button" class="layui-btn  layui-btn-sm " data-url="{:url('export')}"title="导出"><i class="fa fa-folder-o" aria-hidden="true"></i>导出</button>-->
+            <!--黑色分割线 start-->
+            <hr class="layui-bg-black">
+            <!--黑色分割线 end-->
+            共计支付积分：xxx
+            共计收到积分：xxx
+            共计赠送积分：xxx
+            <div class="layui-tab-content" style="height: 500px;" id="wrap">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th>下单时间</th>
+                            <th>用户姓名</th>
+                            <th>电话</th>
+                            <th>订单编号</th>
+                            <th>付款状态</th>
+                            <th>支付金额</th>
+                            <th>支付时间</th>
+                            <th>消耗积分</th>
+                            <th>赠送积分</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{//$vo['create_time']}</td>
+                            <td>{//$vo['customer_name']}</td>
+                            <td>{//$vo['telephone']}</td>
+                            <td>{//$vo['id']}</td>
+                            <td>{//$vo['bouns']}</td>
+                            <td>{//$vo['create_time']}</td>
+                            <td>{//$vo['create_time']}</td>
+                            <td>{//$vo['create_time']}</td>
+                            <td>{//$vo['create_time']}</td>
+                            <td>
+                                <a data-url="{:url('paydetail')}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 查看详情
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="10" style="text-align: center">暂无数据~</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!--分页-->
+                {//$list->render()}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+    substring('good_name', 10);
+
+    //日期范围
+    //日期范围
+    var startDates = '';
+    var endDates = '';
+    laydate.render({
+        elem: '#start_time'
+        , done: function (value, date, endDate) {
+            startDates = value;
+            if (startDates > endDates && endDates != '') {
+                layer.msg('开始日期应小于结束日期！');
+                $('#start_time').val('');
+                startDates = "";
+                form.render();
+                return false;
+            }
+        }
+    });
+    laydate.render({
+        elem: '#end_time'
+        , done: function (value, date, endDate) {
+            endDates = value;
+            if (endDates < startDates && startDates != '') {
+                layer.msg('结束日期应大于开始日期！');
+                $('#end_time').val('');
+                endDates = "";
+                form.render();
+                return false;
+            }
+        }
+    });
+    
+    $(document).on('click', '.pagination a', function () {
+        var search = $("#search").serializeArray();
+        var url = $(this).attr('href');
+        $.ajax({
+            type: 'get',
+            url: url,
+            data: search,
+            success: function (data) {
+                $('#wrap').html(data);
+                form.render();
+            }
+        });
+        return false;
+    });
+    
+    $(document).on('click', '.iframe-edit', function () {
+        var _this = $(this);
+        location.href = _this.attr('data-url');
+    });
+    
+</script>
+{/block}

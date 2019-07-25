@@ -1,0 +1,166 @@
+{extend name="base" /}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">抽奖活动详情</li>
+        </ul>
+        <!--类型 名称 状态 start-->
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                    <div style="margin:10px">
+                        <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" value="{$info['name']}" class="layui-input" disabled>
+                                </div>
+                                <label class="layui-form-label">参与人数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['number']}" disabled>
+                                </div>
+                            </div>    
+                            <div class="layui-form-item">
+                               <label class="layui-form-label">活动时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['begin_time']}" disabled>
+                                    <input type="text" class="layui-input" value="{$info['end_time']}" disabled>
+                                <label class="layui-form-label">活动状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['status']}" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">每人每天共有抽奖次数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['total_day']}" disabled>
+                                    
+                                </div>
+                                <label class="layui-form-label">分享最高获得积分</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['share_max_bonus']}" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">每次分享获得积分数/label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['share_one_bonus']}" disabled>
+                                </div>
+                                <label class="layui-form-label">实物奖品配送方式</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['destribution_type']}" disabled>
+                                    
+                                </div>
+                            </div>
+                            
+
+
+
+                    </div>
+
+                    </div>
+
+                </form>
+            </blockquote>
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab-content" style="height: 500px;">
+                    <form action="url{:('index')}" method="post" class="ajax-form layui-form">
+
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>奖品类型</th>
+                                    <th>奖品名称</th>
+                                    <th>奖品价值</th>
+                                    <th>奖品数量</th>
+                                    <th>奖品概率</th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name='list' id='vo'}
+                                <tr>
+                                    <td>{$vo['id']}</td>
+                                    <td>{$vo['type']}</td>
+                                    <td>{$vo['name']}</td>
+                                    <td>{$vo['worth']}</td>
+                                    <td>{$vo['amount']}</td>
+                                    <td>{$vo['probability']}</td>
+
+
+
+                        </table>
+                    </form></div></div>
+            <div class="layui-tab-item layui-show">
+                <div class="layui-tab-content" style="height: 500px;">
+                    <form action="" method="post" class="ajax-form layui-form">
+
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>用户姓名</th>
+                                    <th>用户手机号</th>
+                                    <th>奖品类型</th>
+                                    <th>奖品名称</th>
+                                    <th>中奖时间</th>
+                                    <th>中奖数量</th>
+                                    <th>兑奖状态</th>
+                                    <th>兑奖时间</th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name='list' id='vo'}
+                                <tr>
+                                    <td>{$vo['id']}</td>
+                                    <td>{$vo['user_id']}</td>
+                                    <td>{$vo['telephone']}</td>
+                                    <td>{$vo['type']}</td>
+                                    <td>{$vo['name']}</td>
+                                    <td>{$vo['']}</td>
+                                    <td></td>
+                                    <td>{$vo['awards_status']</td>
+                                    <td>{$vo['pick_up_time']}</td>
+
+
+
+                        </table>
+                    </form></div> </div>
+            {/block}
+
+            {block name="script"}
+            <script>
+                substring('configleng', 20);
+                function show_detail(str) {
+                    //自定页
+                    //        layer.open({
+                    //           type: 1,
+                    //            shade: false,
+                    //            title: false, //不显示标题
+                    //            content: str, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                    //        });
+                    layer.open({
+                        type: 1
+                        , title: '规则说明'
+                        , area: ['700px', '440px']
+                        , offset: 'auto' //具体配置参考：http://www.layui.com/doc/modules/layer.html#offset
+                                //                , id: 'layerDemo' + type //防止重复弹出
+                        , content: str
+                        , btn: '取&nbsp;&nbsp;消'
+                        , btnAlign: 'c' //按钮居中
+                        , shade: 0.6 //显示遮罩
+                        , yes: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            </script>
+            {/block}

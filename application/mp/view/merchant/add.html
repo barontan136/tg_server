@@ -1,0 +1,137 @@
+{extend name="base" /}
+{block name="body"}
+<link rel="stylesheet" href="__JS__/citypicker/city-picker.css">
+<style>
+    .remove-img{
+        position: relative;color: #ff5722;z-index: 555;left:-25px;top: -32px;font-size: 20px;
+    }    
+</style>
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('')}" method="post">
+                    <div merchant_type>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="must_tip" style="color:red"> *</span>门店名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" maxlength="12" value="" lay-verify="required" placeholder="请输入12字以内门店名称" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="must_tip"> *</span>门店logo</label>
+                            <div class="layui-input-block">
+                                <img id="imgThumb" style="width:70px;height:70px;" img_view src="__IMAGES__/wechat/image.png"  class="layui_upload">
+                                <input type="hidden" name="logo">
+                                <button type="button" id="logo" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>上传</button> <span class="img_tip">建议上传114*114大小的图片</span>
+                            </div>
+                        </div>
+                         <div class="layui-form-item">
+                             <label class="layui-form-label"><span class="must_tip"> *</span>门店图片</label>
+                             <span class="img_tip">（最大5MB，支持jpg、png格式，最少1张，最多4张，超过4张只取前4张存储，上传顺序为轮播顺序）</span>
+                         </div>
+                         <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <div style="max-width:800px"></div>
+                                <button type="button" id="merchant_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>上传</button>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">负责人</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="contact_name" value=""  placeholder="请输入负责人姓名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">负责人电话</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="contact_phone" value="" placeholder="请输入负责人电话" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="must_tip"> *</span>城市</label>
+                            <div class="layui-input-block">
+                                <input class="layui-input form-control" data-pcd readonly name="xaddress" value="" required  lay-verify="required" placeholder="请选择城市" type="text" data-toggle="city-picker" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="must_tip"> *</span>门店地址</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="address" maxlength="30" value="" data-place  placeholder="请输入详细地址,30字以内" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="must_tip"> *</span>门店电话</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="shop_phone" value=""  placeholder="例：0755-27749457" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                             <label class="layui-form-label"><span class="must_tip"> *</span>门店地图</label>
+                              <div class="layui-input-block">
+                              <span class="img_tip">（门店地址,如定位有偏差请手动拖动地图）</span>
+                                <div  style="height: 400px" id="map" class="layui-textarea"></div>
+                                <input type="hidden" name="lat" id="lat">
+                                <input type="hidden" name="lng" id="lng">
+                              </div>
+                        </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        </div>
+                    </div>
+                   </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+{include file="html/ueditor.html" /}
+<script src="__JS__/citypicker/city-picker.data.js"></script>
+<script src="__JS__/citypicker/city-picker.js"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script src="__JS__/map/tencent.js"></script>
+<script>
+     document.body.onloadstart = init(22.543680,114.057910);
+     var images_length=0;
+    //删除图片
+    $('body').on('click', '[remove-img]', function () {
+        $(this).parent().remove();
+        images_length--;
+    })
+     //图片库
+    $('#merchant_images').thinkupload({success: function (data) {
+        var _this = $('#merchant_images');
+        if(images_length>=4){
+            layer.msg('最多上传4张');
+            return false;
+        }
+        $.each(data, function (i, v) {
+           var html='<span><img img_view style="width:150px;height:70px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                 <input type="hidden" name="photos[]" value="'+v.cover_id+'">\n\
+                                 <div remove-img class="fa fa fa-times-circle remove-img"></div></span>';
+          if(images_length >= 4){
+                _this.prev().children().eq(3).remove();
+                _this.prev().children().eq(0).before(html);
+                layer.msg('最多上传4张');
+            }else{
+                _this.prev().append(html);
+                images_length++;
+            }
+        })
+    }});
+    //商户缩略图
+    $('#logo').thinkupload({success: function (data) {
+            $.each(data, function (i, v) {
+                $('#imgThumb').attr('src', v.src);
+                $('input[name=logo]:first').val(v.cover_id);
+                return false;
+            })
+        }});
+    
+    var images_length = 0;
+</script>
+{/block}

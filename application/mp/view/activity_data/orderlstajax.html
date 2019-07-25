@@ -1,0 +1,82 @@
+<form action="" method="post" class="ajax-form layui-form">
+
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>微信</th>
+                <th>用户</th>
+                <th>费用</th>
+                <th>推荐</th>
+                <th>核销</th>
+                <th>状态</th>
+                <th>活动类型</th>
+                <th>进度</th>
+                <th>时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {notempty name='list'}
+            {volist name='list' id='vo' key='k'}
+            <tr>
+                <td>{$k}</td>
+                <td>
+                    <img src="{$vo.head_img}" width="28"/>
+                    <br/>{$vo.nick_name}
+                </td>
+                <td>{$vo.user_name}
+                    <br/>{$vo.mobile}
+                </td>
+                <td>
+                    <button class="layui-btn layui-btn-xs" style="background-color: green;" disabled>￥{$vo.pay_amount}</button> </td>
+                <td>
+                    <img src="{$vo.ref_head_img}" width="28"/>
+                    <br/>{$vo.ref_nick_name}
+                </td>
+                <td>
+                    <input type="checkbox" value="{$vo.status}" lay-skin="switch" lay-text="ON|OFF">
+                </td>
+                <td>
+                    <button class="layui-btn layui-btn-xs" style="background-color:green;" disabled>{$vo.status_name}</button>
+                </td>
+                <td>
+                    <button class="layui-btn layui-btn-xs" style="background-color:green;" disabled>{$vo.act_name}</button>
+                </td>
+                <td>
+                    {if $vo.order_type == 1}
+                    <button class="layui-btn layui-btn-xs" style="background-color:green;" disabled>
+                        {$vo.order_type_name}:[已召集团员{$vo.current_num}人]
+                    </button>
+                    <br/><br/>
+                    <button class="layui-btn layui-btn-xs" style="background-color:red;" disabled>
+                        需要:[{$vo.total_num-$vo.current_num}人] 拼团中
+                    </button>
+                    {else}
+                    <button class="layui-btn layui-btn-xs" style="background-color:blue;" disabled>
+                        {$vo.order_type_name}
+                    </button>
+                    <br/><br/>
+                    <button class="layui-btn layui-btn-xs" style="background-color:green;" disabled>
+                        所属团:{$vo.p_name} 团ID:{$vo.p_id}
+                    </button>
+                    {/if}
+                </td>
+                <td>{$vo.create_datetime}</td>
+                <td>
+                    <!--<a data-url="{:url('ActivityData/detail',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">-->
+                        <!--<i class="fa" aria-hidden="true"></i>查看团员-->
+                    <!--</a>-->
+                    <button type="button" data-action="{:url('ActivityData/deleteOrder',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs ajax-action">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name='list'}
+    {$list->render()}
+    {/notempty}
+</form>

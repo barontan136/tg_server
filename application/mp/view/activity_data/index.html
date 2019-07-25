@@ -1,0 +1,48 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">活动列表</li>
+        </ul>
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get" id="search">
+
+                    <div class="layui-inline">
+
+                        <div class="layui-input-inline">
+                            <input type="text" name="activity_name/like" value="{$activity_name|default=''}" placeholder="请输入名称" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>查询</button>
+                    </div>
+
+                </form>
+            </blockquote>
+
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm iframe-add" data-url="{:url('add')}" title="新增"><i class="fa fa-folder-o" aria-hidden="true"></i>新增</button>
+
+            <div class="layui-tab-item layui-show"  data-form-parent>
+                 {include file="activity/lstajax"/}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+    substring('good_name', 10);
+</script>
+{/block}

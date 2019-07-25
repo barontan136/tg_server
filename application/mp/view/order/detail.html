@@ -1,0 +1,409 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+    .layui-form-pane .layui-form-label {
+        width: 150px;
+    }
+    .layui-form-item .layui-input-inline {
+        width: 250px;
+    }
+    .layui_line{
+        width: 1px;
+        height: 148px;
+        background: #ddd;
+        margin: 0 auto;
+    }
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">订单详情</li>
+           
+        </ul>
+        
+        <div class="layui-tab-content">
+            <div class="layui-input-inline" style="float:right;margin-right: 20px;">            
+                <button class="layui-btn layui-btn-sm" data-back>返回</button>
+            </div>
+            {neq name="info.child_info.policy_id" value=""}
+            <div class="layui-input-inline" style="float:right;margin-right: 20px;">
+                <button onclick="parent.window.open($(this).data('open-url'));" class="layui-btn  layui-btn-sm"  data-open-url="{:url('policy/detail',['id'=>$info['child_info']['policy_id']])}">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>查看保单
+              </button>
+            </div>
+            {/neq}
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>订单商品</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" value="{$info.good_name|default='--'}" class="layui-input" disabled>
+                            </div>
+                            <label class="layui-form-label">商品编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.commodity_info.number|default='--'}" disabled>
+                            </div>
+                        </div>  
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品单价</label>
+                            <div class="layui-input-inline">
+                                <input type="text" value="{$info.child_info.good_unit_price|default='--'}" class="layui-input" disabled>
+                            </div>
+                            <label class="layui-form-label">购买数量</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.amount|default='--'}" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">下单时间</label>
+                            <div class="layui-input-inline">
+                                <input type="datetime" class="layui-input" value="{$info.create_time|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">订单来源</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.from_type_text|default='--'}" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">购买规格</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input layui-input-inline" value="{$info.sku_info_text|default='--'}"  disabled>
+                            </div>
+                             <label class="layui-form-label">配送方式</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.picking_method_text|default='--'}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>支付明细</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">订单编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.order_id|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">订单状态</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.status_text|default='--'}" disabled>
+                            </div>
+                        </div>   
+                          <div class="layui-form-item">
+                            <label class="layui-form-label">支付金额</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.true_money|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">优惠金额</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.offer_money|default='--'}" disabled>
+                            </div>
+                        </div>  
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">支付情况</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.pay_status|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">扣除积分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.use_bonus|default='--'}" disabled>
+                            </div>
+                        </div>  
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">赠送积分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.get_bonus|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">优惠券</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.card_title|default='--'}" disabled>
+                            </div>
+                        </div> 
+                          <div class="layui-form-item">
+                            <label class="layui-form-label">支付邮费</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.good_post_price|default='--'}" disabled>
+                            </div>
+                           
+                        </div>    
+                    </form>
+
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>用户信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$user_name|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">用户电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$user_telephone|default='--'}" disabled>
+                            </div>
+                        </div>    
+                      <div class="layui-form-item">
+                            <label class="layui-form-label">发票抬头</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="--" disabled>
+                            </div>
+                            <label class="layui-form-label">纳税识别号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="--" disabled>
+                            </div>
+                        </div> 
+                         <div class="layui-form-item">
+                            <label class="layui-form-label">订单留言</label>
+                            <div class="layui-input-inline">
+                                <textarea  class="layui-textarea" disabled  style="width: 660px; height: 80px;" placeholder="--">{$info.child_info.leave_comments|default=''}</textarea>
+                            </div>
+                           
+                        </div>   
+                    </form>
+
+                </div>
+            </fieldset>
+            {eq name="info.picking_method" value="2"}
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>物流信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" id="form_express">
+                         <input type="hidden" name="id" value="{$info.id}">
+                         <input type="hidden" name="from_type" value="{$info.from_type}">
+                         <input type="hidden" name="order_id" value="{$info.order_id}">
+                         <input type="hidden" name="express_name" value="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">收件人姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.name|default='--'}" disabled>
+                            </div>
+                            <label class="layui-form-label">收件人电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info.child_info.telephone|default='--'}" disabled>
+                            </div>
+                        </div>    
+                         <div class="layui-form-item">
+                            <label class="layui-form-label">快递单号</label>
+                            <div class="layui-input-inline" >
+                                <input type="text" name="express_id" id="express_id" class="layui-input" value="{$info.express_id}" placeholder="请输入快递单号" {neq name="info.status" value="3"}disabled{/neq}>
+                            </div>
+                            <label class="layui-form-label">快递公司</label>
+                            <div class="layui-input-inline">
+                                <select name="express_code" style="height: 200px" lay-verify="required" lay-filter="express_code" {neq name="info.status" value="3"}disabled{else/} lay-search=""{/neq}>
+                                    <option value="">直接选择或搜索选择物流名称</option>
+                                    {volist name="express_list" id="vo"}
+                                    <option value="{$vo.code}" {:$vo['code'] == $info['child_info']['express_code']?'selected':''}>{$vo.name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div> 
+                         <div class="layui-form-item">
+                            <label class="layui-form-label">收件地址</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" style="width: 660px;" value="{$info.child_info.province} {$info.child_info.city} {$info.child_info.district} {$info.child_info.address}" disabled>
+                            </div>
+                        </div>
+                        {eq name="info.status" value="3"}
+                            <div class="layui-form-item">
+                                <a href="javaScript:;" class="layui-btn layui-btn-sm" onclick="ship()">确认发货</a>
+                            </div>
+                        {/eq}
+                        {eq name="info.status" value="4"}
+                        <div class="layui-form-item">
+                            <a href="javaScript:;" class="layui-btn layui-btn-sm layui-btn-disabled">已发货</a>
+                        </div>
+                        {/eq}
+                    </form>
+                </div>
+            </fieldset>
+            {/eq}
+            {eq name="info.picking_method" value="1"}
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>自提信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" id="form_pick">
+                        <input type="hidden" name="id" value="{$info.id}">
+                         <input type="hidden" name="from_type" value="{$info.from_type}">
+                         <input type="hidden" name="order_id" value="{$info.order_id}">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自提状态</label>
+                            <div class="layui-input-inline">
+                                {if condition="$info['status'] == -5"}
+                                    <input type="text" class="layui-input" value="已过期" disabled>
+                                {else/}
+                                <input type="text" class="layui-input" value="{:$info['child_info']['pick_up_time']>0?'已提货':'待提货'}" disabled>
+                                {/if}
+                            </div>
+                            <label class="layui-form-label">自提时间</label>
+                            <div class="layui-input-inline">
+                                <input type="datetime" class="layui-input" value="{:empty($info['child_info']['pick_up_time'])?'--':date('Y-m-d',$info['child_info']['pick_up_time'])}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">提货码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" name="take_code" value="{$info.take_code}" disabled>
+                            </div>
+                            <label class="layui-form-label">提货有效期至</label>
+                            <div class="layui-input-inline">
+                                <input type="datetime" class="layui-input" value="{:date('Y-m-d',$info['child_info']['picking_valid_time'])}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">提货门店</label>
+                            <div class="layui-input-inline">
+                                <select name="take_shop_id" style="height: 200px" lay-verify="required" lay-filter="take_shop_address" {neq name="info.status" value="3"}disabled{else/} lay-search=""{/neq}>
+                                    <option value="">直接选择或搜索选择门店名称</option>
+                                    {volist name="shop_list" id="vo"}
+                                    <option value="{$vo.id}||{$vo.province}{$vo.city}{$vo.district}{$vo.town}{$vo.address}" {:$vo['id'] == $info['take_shop_id']?'selected':''}>{$vo.name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </div>
+                        {eq name="info.status" value="3"}
+                            <div class="layui-form-item">
+                                <a href="javaScript:;" class="layui-btn layui-btn-sm" onclick="pick()">确认提货</a>
+                            </div>
+                        {/eq}
+                        {eq name="info.status" value="6"}
+                            <div class="layui-form-item">
+                                <a href="javaScript:;" class="layui-btn layui-btn-sm layui-btn-disabled">已提货</a>
+                            </div>
+                        {/eq}
+                    </form>
+                </div>
+            </fieldset>
+            {/eq}
+            {eq name="info.from_type" value="6"}
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>金卡定制信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="post">
+                        <div class="layui-form-item">
+                            <div class="layui-row">
+                                <div class="layui-col-md2" style="margin-right:10px;">
+                                    <img img_view src="{$info.child_info.on_image}" style="object-fit: cover;width:100%;height: 120px;" >
+                                    <label class="layui-form-label" style="height: 30px;line-height: 20px;width: 75px;float: left;padding: 5px 0px;margin: 10px 0px;">正面图片</label>
+                                    <a href="{$info.child_info.on_image}" download="{$info.child_info.on_image}" class="layui-btn layui-btn-xs" style="line-height: 20px;padding: 5px 0px;float:right;margin:10px 0px;height: 30px;line-height: 20px;width: 45px;">下载</a>
+                                </div>
+                                <div class="layui-col-md3" style="margin-right:10px;">
+                                    <textarea id="on_text_area" class="layui-textarea" disabled style=" height: 120px;width:100%;" placeholder="--">{$info.child_info.on_text|default=""}</textarea> 
+                                    <label class="layui-form-label" style="height: 30px;line-height: 20px;width: 75px;float: left;padding: 5px 0px;margin: 10px 0px;">正面文字</label>
+                                    <!--<a href="javaScript:;" onclick="copyText($(this))" class="layui-btn layui-btn-xs" style="line-height: 20px;padding: 5px 0px;float:right;margin:10px 0px;height: 30px;line-height: 20px;width: 45px;">复制</a>-->
+                                </div>
+                                <div class="layui-col-md1" style="width: 36px;text-align: center;margin: 0 auto;">
+                                    <hr class="layui_line"/>
+                                </div>
+                                <div class="layui-col-md2" style="margin-left:10px;">
+                                    <img img_view src="{$info.child_info.down_image}" style="object-fit: cover;width:100%;height: 120px;" >
+                                    <label class="layui-form-label" style="height: 30px;line-height: 20px;width: 75px;float: left;padding: 5px 0px;margin: 10px 0px;">背面图片</label>
+                                    <a href="{$info.child_info.down_image}" download="{$info.child_info.down_image}" class="layui-btn layui-btn-xs" style="line-height: 20px;padding: 5px 0px;float:right;margin:10px 0px;height: 30px;line-height: 20px;width: 45px;">下载</a>
+                                </div>
+                                <div class="layui-col-md3" style="margin-left:10px;">
+                                    <textarea  class="layui-textarea" disabled style=" height: 120px;width:100%;" placeholder="--">{$info.child_info.down_text|default=""}</textarea> 
+                                    <label class="layui-form-label" style="height: 30px;line-height: 20px;width: 75px;float: left;padding: 5px 0px;margin: 10px 0px;">背面文字</label>
+                                    <!--<a href="{$info.child_info.on_image}" download="{$info.child_info.on_image}" class="layui-btn layui-btn-xs" style="line-height: 20px;padding: 5px 0px;float:right;margin:10px 0px;height: 30px;line-height: 20px;width: 45px;">下载</a>-->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+            {/eq}
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+    function copyText(self){
+//        var oInput = document.createElement('input');
+//        oInput.value = '55555555';
+        var on_text_area = document.getElementById("on_text_area");
+//        parent.window.clipboardData.setData("Text","99999999");
+        on_text_area.select();
+        try{
+            if(document.execCommand('copy', false, null)){
+                document.execCommand("copy");
+                layer.msg("已复制好，可贴粘。");
+            } else{
+                layer.msg("复制失败，请手动复制");
+            }
+        } catch(err){
+            layer.msg("复制失败，请手动复制");
+        }
+//        document.execCommand("Copy",false,'');
+        layer.msg('复制成功');
+    }
+    form.on('select(express_code)', function(data){
+        $('#form_express input[name=express_name]').val($(data.elem).find('option:selected').text());
+    });
+    /**
+     * 发货
+     * @returns {undefined}
+     */
+    function ship(){
+        var express_id = $('#form_express input[name=express_id]').val();
+        if(express_id == ''){
+            layer.msg('请填写快递单号');
+            return false;
+        }
+        var express_code = $('#form_express input[name=express_code]').val();
+        if(express_code == ''){
+            layer.msg('请选择快递公司');
+            return false;
+        }
+        var form_data  = $('#form_express').serializeArray();
+        $.ajax({
+            type: 'post',
+            url: "{:url('ship')}",
+            data: form_data,
+            success: function (res) {
+                layer.msg(res.msg);
+                if(res.url != ''){
+                    window.location.replace(res.url);
+                    return false;
+                }
+            },
+            error:function(){
+                layer.msg('服务繁忙！');
+            }
+        });
+    }
+    /**
+     * 自提
+     * @returns {undefined}
+     */
+    function pick(){
+        var clientpick=$('#form_pick').serializeArray();
+        $.ajax({
+            type: 'post',
+            url: "{:url('pick')}",
+            data: clientpick,
+            success: function (res) {
+                layer.msg(res.msg);
+                if(res.url != ''){
+                    window.location.replace(res.url);
+                    return false;
+                }
+            },
+            error:function(){
+                layer.msg('服务繁忙！');
+            }
+        });
+    }
+</script>
+{/block}

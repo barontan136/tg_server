@@ -1,0 +1,142 @@
+{extend name="base" /}
+{block name="body"}
+<style>
+    .remove-img{
+        position: relative;color: #ff5722;z-index: 555;left:-25px;top: -32px;
+        font-size: 20px;
+    }
+    .w70{
+        width: 70% !important
+    }
+</style>
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本参数设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('base_config')}" method="post">
+                    <input type="hidden" name ="id" value="{$info.id|default=''}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">活动未开始</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="start_tip" value="{$info.start_tip|default=''}"    placeholder="活动未开始时的提醒" autocomplete="off" class="layui-input">
+                            <!--<span class=''>活动未开始时的提醒</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">活动已结束</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="end_tip" value="{$info.end_tip|default=''}"    placeholder="活动已结束时的提醒" autocomplete="off" class="layui-input">
+                            <!--<span class=''>活动已结束时的提醒</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>提示关注</label>
+                        <div class="layui-input-inline ">
+                            <input type="radio" name="is_subscribe" lay-verify="required" value="0"  {eq name="$info.is_subscribe|default='0'" value='0'} checked="" {/eq}  title="暂停">
+                                   <input type="radio" name="is_subscribe" lay-verify="required" value="1" {eq name="$info.is_subscribe|default='0'" value='1'}checked="" {/eq} title="启用">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>关注二维码</label>
+                        请上传关注二维码图片，多张图片只取第一张。
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <div style="max-width:800px">
+                                {notempty name="info.qrcode_url"}
+                                <span><img img_view style="width:150px;height:70px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($info.qrcode_url)}">
+                                    <input type="hidden" name="image[]" required lay-verify="required" value="{$info.qrcode_url||default=''}">
+                                    <div remove-img class="fa fa fa-times-circle remove-img"></div></span>
+                                {/notempty}
+                            </div>
+                            <button type="button" id="images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>上传</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">公众号名称</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="wechat_name" value="{$info.wechat_name|default=''}"  placeholder="公众号名称" autocomplete="off" class="layui-input">
+                            <!--<span class=''>公众号名称</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">公众号描述</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="wechat_content" value="{$info.wechat_content|default=''}"  placeholder="描述，尽量简短" autocomplete="off" class="layui-input">
+                            <!--<span class=''>描述，尽量简短</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">关注提示语</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="subscribe_word" value="{$info.subscribe_word|default=''}"   placeholder="出现二维码时底部的提示信息" autocomplete="off" class="layui-input">
+                            <!--<span class=''>出现二维码时底部的提示信息</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">技术支持</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="support_name" value="{$info.support_name|default=''}"   placeholder="技术支持的名称" autocomplete="off" class="layui-input">
+                            <!--<span class=''>技术支持的名称</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">技术支持电话</label>
+                        <div class="layui-input-inline w70">
+                            <input type="text" name="support_telephone" value="{$info.support_telephone|default=''}"   placeholder="技术支持的电话" autocomplete="off" class="layui-input">
+                            <!--<span class=''>技术支持的电话</span>-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name='script'}
+{include file="html/ueditor.html" /}
+<script src="__JS__/map/tencent.js"></script>
+<script>
+    var images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img]', function () {
+        $(this).parent().remove();
+        images_length--;
+    });
+    //商户缩略图    
+    var images_length = $("input[type='hidden'][name='image[]']").length;
+
+    $('#images').thinkupload({success: function (data) {
+            var _this = $('#images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html += '<span><img img_view style="width:150px;height:70px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="image[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img class="fa fa fa-times-circle remove-img"></div></span>';
+                if (images_length < 4) {
+                    _this.prev().append(html);
+                    images_length++;
+                } else {
+                    _this.prev().children().eq(3).remove();
+                    _this.prev().children().eq(0).before(html);
+                }
+            });
+        }});
+
+</script>
+{/block}

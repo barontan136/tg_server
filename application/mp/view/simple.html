@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <meta name="keywords" content="">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <title>{:config('site_title')}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="__JS__/layui/css/layui.css" media="all">
+        <link rel="stylesheet" href="__CSS__/font-awesome.min.css">
+        <style>
+             //掩藏滚动条
+            ::-webkit-scrollbar {display:none}
+            ::-webkit-scrollbar{width:0px}
+        </style>
+        <!--CSS引用-->
+        {block name="css"}{/block}
+        <!--<link rel="stylesheet" href="__CSS__/global.css">-->
+        <style>.layui-btn {background-color: #fc9503;color: #fafafa;}</style>
+        <link rel="stylesheet" href="__CSS__/admin.css">
+        <link rel="stylesheet" href="__STATIC__/wechat_theme/css/admin_base.css">
+        <link rel="stylesheet" href="__STATIC__/wechat_theme/css/icon.css">
+        <link rel="stylesheet" href="__CSS__/animate.css" media="all">
+        <style>
+            .layui-body { position: relative;left: 0}
+            dd, dt {line-height: 34px}
+            .layui-nav .layui-nav-item {line-height: 37px; }
+            .layui-nav-child {z-index: 10000;top:32px}
+            .layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+                background-color:transparent; 
+            }
+            .menu dl dt a {color: rgb(141, 141, 141);}
+            .topbar li { padding: 2px 10px; }
+            .topbar ul {height: 30px}
+            .layui-nav .layui-nav-item {line-height: 30px;height: 30px}
+            .layui-nav .layui-nav-more {top: 13px;}
+            .layui-elem-quote {margin-bottom:10px !important;}
+            .layui-elem-quote form div.layui-inline {padding: 5px;}
+            .layui-elem-quote{    border-left: 5px solid #fc9503;}
+            .layui-tab-brief>.layui-tab-title .layui-this {color: #fc9503;}
+            .layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after { border-bottom: 2px solid #fc9503;}
+            .layui-table td, .layui-table th {
+                position: relative;
+                padding: 5px 10px;
+                min-height: 15px;
+                line-height: 15px;
+                font-size: 12px;
+            }
+            .layui-elem-quote {
+                background-color: #fff;
+            }
+            .pagination li.active {
+                background: #fc9503;
+                color: #fff;
+                border: 1px solid #fc9503;
+            }
+            .layui-nav * {font-size: 12px;}
+            .layui-nav .layui-nav-item a{padding: 0px;color:#000}
+            .layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a {
+                color: #000;
+            }
+            .layui-elem-field legend{font-size: 14px}
+            .form-container {
+                max-width: 1100px; 
+            }
+            .layui-form-label{width:12%}
+            .layui-input-block { margin-left: 159px;}
+            table tr{cursor: pointer}
+        </style>
+        <!--[if lt IE 9]>
+        <script src="__CSS__/html5shiv.min.js"></script>
+        <script src="__CSS__/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="trade-order">
+        <div class="container_body wrap animated fadeIn" style="width:100% !important">
+            <!--<div class="sidebar" style="width:5px;background: #e7e8eb"></div>-->
+            <div class="content" id="tradeSearchBd">
+                {block name="body"}{/block}
+            </div>
+        </div>
+    </body>
+    <script src="__JS__/jquery.min.js"></script>
+    <script src="__JS__/layui/layui.all.js"></script>
+    <script src="__JS__/mp.js"></script>
+    {block name="js"}{/block}
+    <!--页面JS脚本-->
+    {block name="script"} {/block}
+    <!--导航高亮-->
+</html>

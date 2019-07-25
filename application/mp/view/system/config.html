@@ -1,0 +1,92 @@
+{extend name="base" /}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">配置管理</li>
+            <li class=""><a href="{:url('setConfig')}">配 置</a></li>
+        </ul>
+       <div class="layui-tab-content">
+        <blockquote class="layui-elem-quote">
+         <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                <div class="layui-inline">
+                    <label class="layui-form-label">分组</label>
+                    <div class="layui-input-inline">
+                        {php}empty($group)&&$group = ''{/php}
+                        <select name="group">
+                            <option value="0">--全部--</option>
+                            {foreach name="groupList" item="vo"}
+                            <option value="{$vo}" {if condition="$group==$vo"} selected="selected"{/if}>{$vo}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title/like" value="{$title|default=''}" placeholder="请输入名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">常量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name/like" value="{$name|default=''}" placeholder="请输入常量" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>搜索</button>
+                </div>
+            </form>
+            </blockquote>
+            <div class="layui-tab-item layui-show">
+            <form action="" method="post" class="ajax-form layui-form">
+            <button type="button" class="layui-btn  layui-btn-sm iframe-add" data-url="{:url('add')}" id="config"><i class="fa fa-folder-o" aria-hidden="true"></i> 添 加</button>
+            <button type="button" class="layui-btn layui-btn-danger layui-btn-sm ajax-action" data-action="{:url('del')}"><i class="fa fa-trash" aria-hidden="true"></i> 删 除</button>
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+                            <th style="width: 30px;">ID</th>
+                            <th>配置名称</th>
+                            <th>配置常量</th>
+                            <th>配置值</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         {foreach name="_list" item="vo"}
+                            <tr>
+                                <td ><input type="checkbox" name="ids[]" lay-skin="primary" value="{$vo.id}"></td>
+                                <td class="configleng">{$vo.id}</td>
+                                <td class="configleng">{$vo.title}</td>
+                                <td class="fly-tip"><span class="fly-tip-jing configleng">{$vo.name}</span></td>
+                                <td class="fly-tip">
+                                    {eq name="vo.type" value="3"}
+                                        <span class="fly-tip-jie configleng" style="margin-bottom: 5px">{:array2string($vo.value_text)}</span>
+                                    {else/}
+                                    <span class="fly-tip-jie configleng">{$vo.value|default='无配置'}</span>
+                                    {/eq}
+                                </td>
+                                <td>
+                                    <a data-url="{:url('edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 编辑</a>
+                                    <a href="{:url('del',['id'=>$vo['id']])}" class="layui-btn layui-btn-danger layui-btn-xs ajax-delete"><i class="fa fa-trash" aria-hidden="true"></i> 删除</a>
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+                 <!--分页-->
+                 {$_list->render()}
+             </div>
+            </form>
+       </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    substring('configleng',20)
+</script>
+{/block}

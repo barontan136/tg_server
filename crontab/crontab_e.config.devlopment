@@ -1,0 +1,2 @@
+0 5 * * * /bin/sh /alidata/biz-code/socrates/crontab/act_earning_inc.sh
+0 4 * * * /bin/sh /alidata/biz-code/socrates/crontab/act_earning_dec.sh

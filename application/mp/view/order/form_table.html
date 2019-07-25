@@ -1,0 +1,116 @@
+<form action="" method="post" class="ajax-form layui-form">
+    <div style="text-align: right;">
+        {eq name="table_index" value="4"}<button type="button" class="layui-btn  layui-btn-sm" onclick="showPick()">确认提货</button>{/eq}
+        {in name="table_index" value="1,4"}<button type="button" class="layui-btn  layui-btn-sm" onclick="cancel()">取消订单</button>{/in}
+    </div>
+    <div class="layui-form">
+        {eq name="table_index" value="3"}
+            <div class="layui-form-item">
+                <label class="layui-form-label">完成类型</label>
+                <div class="layui-input-block">
+                  <input type="radio" lay-filter="complete_type" name="complete_type" value="0" title="全部" {eq name="complete_type" value="0"}checked{/eq}>
+                  <input type="radio" lay-filter="complete_type" name="complete_type" value="1" title="用户确认收货" {eq name="complete_type" value="1"}checked{/eq}>
+                  <input type="radio" lay-filter="complete_type" name="complete_type" value="2" title="自提系统确认" {eq name="complete_type" value="2"}checked{/eq}>
+                  <input type="radio" lay-filter="complete_type" name="complete_type" value="3" title="到期自动确认" {eq name="complete_type" value="3"}checked{/eq}>
+                </div>
+            </div>
+        {/eq}
+        {eq name="table_index" value="5"}
+            <div class="layui-form-item">
+                <label class="layui-form-label">关闭原因</label>
+                <div class="layui-input-block">
+                  <input type="radio" lay-filter="cancel_type" name="cancel_type" value="0" title="全部" {eq name="cancel_type" value="0"}checked{/eq}>
+                  <input type="radio" lay-filter="cancel_type" name="cancel_type" value="1" title="未付款" {eq name="cancel_type" value="1"}checked{/eq}>
+                  <input type="radio" lay-filter="cancel_type" name="cancel_type" value="2" title="超期未提货" {eq name="cancel_type" value="2"}checked{/eq}>
+                  <input type="radio" lay-filter="cancel_type" name="cancel_type" value="3" title="系统取消订单" {eq name="cancel_type" value="3"}checked{/eq}>
+                </div>
+            </div>
+        {/eq}
+    </div>
+    <table class="layui-table">
+        <thead>
+            <tr>
+                {in name="table_index" value="1,4"}
+                <th style="width: 15px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+                {/in}
+                <th>下单时间</th>
+                <th>用户信息</th>
+                <th>商品名称</th>
+                <th>订单编号</th>
+                <th>订单状态</th>
+                <th>付款状态</th>
+                <th>订单金额</th>
+                <th>订单来源</th>
+                {in name="table_index" value="0,4"}
+                <th>提货码</th>
+                {/in}
+                <th>配送方式</th>
+                {in name="table_index" value="0,2,3"}
+                <th>快递单号</th>
+                {/in}
+                {eq name="table_index" value="3"}
+                <th>完成类型</th>
+                {/eq}
+                {eq name="table_index" value="5"}
+                <th>关闭原因</th>
+                <th>退款金额</th>
+                {/eq}
+                {notin name="table_index" value="1,4"}
+                <th>操作人员</th>
+                {/notin}
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {notempty name="_list"}
+                {volist name="_list" id="vo"}
+                    <tr>
+                        {in name="table_index" value="1,4"}
+                        <td><input type="checkbox" name="ids[]" lay-skin="primary" value="{$vo.id}"></td>
+                        {/in}
+                        <td>{$vo.create_time|default='--'}</td>
+                        <td>
+                            {$vo['user_name']}
+                            <br>
+                            {$vo['user_telephone']}
+                            {:empty($vo['user_name'])&&empty($vo['user_telephone'])?'--':''}
+                        </td>
+                        <td><sapn class="title_length" title="{$vo.good_name|default='--'}">{$vo.good_name}</sapn></td>
+                        <td><span class="order_id">{$vo.order_id|default='--'}</span></td>
+                        <td>{$vo.status_text|default='--'}</td>
+                        <td>{$vo.pay_status|default='--'}</td>
+                        <td>{$vo.true_money|default='--'}</td>
+                        <td>{$vo.from_type_text|default='--'}</td>
+                        {in name="table_index" value="0,4"}
+                        <td>{$vo.take_code|default='--'}</td>
+                        {/in}
+                        <td>{$vo.picking_method_text|default='--'}</td>
+                        {in name="table_index" value="0,2,3"}
+                        <td>{:empty($vo['express_id'])?'--':$vo['express_id']}</td>
+                        {/in}
+                        {eq name="table_index" value="3"}
+                        <th>{$vo.complete_type_text}</th>
+                        {/eq}
+                        {eq name="table_index" value="5"}
+                        <th>{$vo.remark|default='--'}</th>
+                        <th>{$vo.refund_money}</th>
+                        {/eq}
+                        {notin name="table_index" value="1,4"}
+                        <th>{$vo.admin_user_name|default='--'}</th>
+                        {/notin}
+                        <td>
+                            <a data-url="{:url('detail',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                                详 情
+                            </a>
+                        </td>
+                    </tr>
+                {/volist}
+            {else/}
+                <tr>
+                    <td colspan="20" style="text-align: center">暂无数据~</td>
+                </tr>
+            {/notempty}
+        </tbody>
+    </table>
+    {$_list->render()}
+</form>

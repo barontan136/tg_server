@@ -1,0 +1,348 @@
+{extend name="base" /}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">订单管理</li>
+        </ul>
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get" id="search">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">下单时间</label>
+                        <div class="layui-input-inline" style="float:left;" >
+                            <input type="text" class="layui-input" id="start_time" readonly name="start_time" value="{$start_time|default=''}" placeholder="请选择开始时间"> 
+                        </div>
+                        <label class="layui-form-label" style="border:none;background: #f2f2f2;width: 45px;">至</label>
+                        <div class="layui-input-inline" >
+                            <input  type="text" class="layui-input" id="end_time" readonly name="end_time" value="{$end_time|default=''}" placeholder="请选择结束时间">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="order_id" maxlength="18" value="{$order_id|default=''}" placeholder="请输入订单编号" class="layui-input">
+                        </div>
+                    </div><br>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">快递单号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="express_id" value="{$express_id|default=''}" placeholder="请输入快递单号" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">姓名/电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" value="{$name|default=''}" placeholder="请输入姓名电话" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商品名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="good_name" maxlength="12" value="{$good_name|default=''}" placeholder="请输入商品名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单状态</label>
+                        <div class="layui-input-inline">
+                             <select name="status" id="select_status" {neq name="table_index" value="0"}disabled{/neq}>
+                                  {php}if(empty($status))$status=""{/php}
+                                   <option  value="0">全部</option>
+                                    <option value="1" {if condition="($status EQ 1) OR ($table_index EQ 1)"} selected="selected"{/if}>待发货</option>
+                                    <option value="2" {if condition="($status EQ 2) OR ($table_index EQ 2)"} selected="selected"{/if}>已发货</option>
+                                    <option value="3" {if condition="($status EQ 3) OR ($table_index EQ 3)"} selected="selected"{/if}>已完成</option>
+                                    <option value="4" {if condition="($status EQ 4) OR ($table_index EQ 4)"} selected="selected"{/if}>待提货</option>
+                                    <option value="5" {if condition="($status EQ 5) OR ($table_index EQ 5)"} selected="selected"{/if}>已关闭</option>
+                             </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">提货码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="take_code" maxlength="10" value="{$take_code|default=''}" placeholder="请输入提货码" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">配送方式</label>
+                        <div class="layui-input-inline">
+                            <select name="picking_method">
+                                   {php}if(empty($picking_method))$picking_method=""{/php}
+                                   <option  value="0" >全部</option>
+                                   <option  value="1" {if $picking_method==1} selected="selected"{/if}>自提</option>
+                                   <option  value="2" {if $picking_method==2} selected="selected"{/if}>邮寄</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单来源</label>
+                        <div class="layui-input-inline">
+                            <select name="from_type">
+                                   {php}if(empty($from_type))$from_type=""{/php}
+                                   <option  value="0" >全部</option>
+                                   <option  value="1" {eq name="from_type" value="1"}selected{/eq}>微信商城</option>
+                                   <option  value="2" {eq name="from_type" value="2"}selected{/eq}>砍价活动</option>
+                                   <option  value="3" {eq name="from_type" value="3"}selected{/eq}>秒杀活动</option>
+                                   <option  value="4" {eq name="from_type" value="4"}selected{/eq} disabled>其他活动</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <input type="hidden" name="tab" value="{$table_index}">
+                        <input type="hidden" name="complete_type" id="complete_type" value="{$complete_type}">
+                        <input type="hidden" name="cancel_type" id="cancel_type" value="{$cancel_type}">
+                        <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>查询</button>
+                        <a class="layui-btn layui-btn-sm" href="javaScript:;" onclick="export_csv()">导出</a>
+                    </div>
+                </form>
+            </blockquote>
+            <div class="layui-tab" lay-filter="table_data">
+                <ul class="layui-tab-title">
+                    <li {eq name="table_index" value="0"}class="layui-this" style="color:skyblue"{/eq}>全部</li>
+                    <li {eq name="table_index" value="1"}class="layui-this" style="color:skyblue"{/eq}>待发货</li>
+                    <li {eq name="table_index" value="2"}class="layui-this" style="color:skyblue"{/eq}>已发货</li>
+                    <li {eq name="table_index" value="3"}class="layui-this" style="color:skyblue"{/eq}>已完成</li>
+                    <li {eq name="table_index" value="4"}class="layui-this" style="color:skyblue"{/eq}>待提货</li>
+                    <li {eq name="table_index" value="5"}class="layui-this" style="color:skyblue"{/eq}>已关闭</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show" data-form-parent id="table_data">
+                        {include file='order/form_table'/}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    heavyLoad();
+    /**
+     * 初始化页面方法
+     * @returns {undefined}
+     */
+    function heavyLoad(){
+        substring('title_length',10);
+    }
+    function export_csv(){
+        $("#search").attr('action','{:url("export")}');
+        $("#search").submit();
+        $("#search").attr('action','{:url("index")}');
+    }
+    var table_index = parseInt("{$table_index}");
+    var complete_type = parseInt("{$complete_type}");
+    var cancel_type = parseInt("{$cancel_type}");
+    element.on('tab(table_data)', function (data) {
+        if(table_index != data.index){
+            $(this).css('color', 'skyblue').siblings().removeAttr('style');
+            $(this).addClass('green').siblings().removeClass('green');
+            table_index = data.index;
+            $("input[name='tab']").val(table_index);
+            $("#select_status").val(table_index);
+            $("#select_status").removeAttr('disabled');
+            $("#search input[name='complete_type']").val(0);
+            $("#search input[name='cancel_type']").val(0);
+            if(table_index != 0){
+                $("#select_status").attr('disabled',true);
+            }
+            if(table_index == 3){
+                form.on('radio(complete_type)', function(data){
+                    if(data.value != complete_type){
+                        $("#search input[name='complete_type']").val(data.value);
+                        changeTable();
+                    }
+                    complete_type = data.value;
+                });
+            }
+            if(table_index == 5){
+                form.on('radio(cancel_type)', function(data){
+                    if(data.value != cancel_type){
+                        $("#search input[name='cancel_type']").val(data.value);
+                        changeTable();
+                    }
+                    cancel_type = data.value;
+                });
+            }
+            changeTable();
+        }
+    });
+    /**
+     * 刷新table
+     * @returns {undefined}
+     */
+    function changeTable(){
+        var search = $("#search").serializeArray();
+        $.ajax({
+            type: 'get',
+            url: "{:url('index')}",
+            data: search,
+            success: function (data) {
+                $('#table_data').html(data);
+                form.render();
+                heavyLoad();
+            },
+            error:function(){
+                layer.msg('服务繁忙！');
+            }
+        });
+    }
+    /**
+     * 取消订单
+     * @type String|value
+     */
+    function cancel(){
+        var index_msg = layer.load('', {
+            shade: 0.1
+        });
+        if($("input[name='ids[]']:checked").length == 0){
+            layer.msg('请选择订单！');
+            return false;
+        }
+        var ids = [];
+        $.each($("input[name='ids[]']:checked"),function(i,v){
+            ids.push($(this).val());
+        });
+        $.ajax({
+            type: 'post',
+            url: "{:url('cancel')}",
+            data: {ids:ids},
+            success: function (res) {
+                layer.close(index_msg);
+                layer.msg(res.msg);
+                if(res.code == 1){
+                    window.location.reload();
+                    return false;
+                }
+                if(res.data.error_order_ids){
+                    $.each($(".order_id"),function(i,v){
+                        if($.inArray($(this).text(),res.data.error_order_ids) > -1){
+                            $(this).css('color','red');
+                        }
+                    });
+                }
+            },
+            error:function(){
+                layer.close(index_msg);
+                layer.msg('服务繁忙！');
+            }
+        });
+    }
+    /**
+     * 确认提货，选择门店
+     * @returns {value|String|Boolean}
+     */
+    function showPick(){
+        take_shop_id = '';
+        if($("input[name='ids[]']:checked").length == 0){
+            layer.msg('请选择订单！');
+            return false;
+        }
+        $.ajax({
+            type: 'post',
+            url: "{:url('_getShopList')}",
+            success: function (res) {
+                if(res.code != 1){
+                    layer.msg(res.msg);
+                    return false
+                }
+                let html = '<div>';
+                html += '<form class="layui-form" action="">';
+                html += '<div class="layui-form-item">';
+                html += '<label class="layui-form-label">提货门店</label>';
+                html += '<div class="layui-input-block">';
+                html += '<select lay-filter="take_shop_address" id="take_shop_address" lay-verify="required" lay-search="">';
+                html += '<option value=""></option>';
+                $.each(res.data,function(i,v){
+                    html += '<option value="'+v.id+'||'+v.province+''+v.city+''+v.district+''+v.town+''+v.address+'">'+v.name+'</option>';
+                });
+                html += '</select>';
+                html += '</div>';
+                html += '</div>';
+                html += '</form>';
+                html += '</div>';
+                let index = layer.open({
+                    type:1,
+                    title:'提货门店',
+                    content:html,
+                    area:['550px', '300px'],
+                    btn:['提交','取消'],
+                    btnAlign:'c',
+                    yes:function(){
+                        layer.close(index);
+                        var index_msg = layer.load('', {
+                            shade: 0.1
+                        });
+                        var ids = [];
+                        $.each($("input[name='ids[]']:checked"),function(i,v){
+                            ids.push($(this).val());
+                        });
+                        $.ajax({
+                            type: 'post',
+                            url: "{:url('pick')}",
+                            data: {id:ids,take_shop_id:take_shop_id},
+                            success: function (res) {
+                                layer.close(index_msg);
+                                layer.msg(res.msg);
+                                if(res.code == 1){
+                                    window.location.reload();
+                                    return false;
+                                }
+                            },
+                            error:function(){
+                                layer.close(index_msg);
+                                layer.msg('服务繁忙！');
+                            }
+                        });
+                    },
+                    btn2:function(){
+                        layer.close(index);
+                    }
+                });
+                
+                form.on('select(take_shop_address)', function(data){
+                    take_shop_id = data.value;
+                });
+                form.render();
+            },
+            error:function(){
+                layer.msg('服务繁忙！');
+            }
+        });
+    }
+    var take_shop_id = '';
+    //进行时间判断
+    var starttime = "{:$start_time}";
+    var endtime = "{:$end_time}";
+    laydate.render({
+        elem: '#start_time',
+//        btns: ['clear', 'confirm'],
+//        max:0,
+        done: function (value, date, endDate) {
+            starttime = value;
+            if (starttime > endtime && endtime != '') {
+                layer.msg('开始日期应小于结束日期！');
+                $('#start_time').val('');
+                starttime = "";
+                form.render();
+                return false;
+            }
+        }
+    });
+    laydate.render({
+        elem: '#end_time',
+        max:0,
+        done: function (value, date, endDate) {
+            endtime = value;
+            if (endtime < starttime && starttime != '' && endtime != '') {
+                layer.msg('结束日期应大于开始日期！');
+                $('#end_time').val('');
+                endtime = "";
+                form.render();
+                return false;
+            }
+        }
+    });
+</script>
+{/block}

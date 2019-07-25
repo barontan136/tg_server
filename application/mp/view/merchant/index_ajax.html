@@ -1,0 +1,54 @@
+<form action="" method="post" class="ajax-form layui-form">
+    <button type="button" class="layui-btn  layui-btn-sm iframe-add" data-url="{:url('add')}" id="config" title="商户添加"><i class="fa fa-folder-o" aria-hidden="true"></i> 新 增</button>
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>设置为主门店</th>
+                <th>序号</th>
+                <th>门店名称</th>
+                <th>门店地址</th>
+                <th>门店电话</th>
+                <th>负责人</th>
+                <th>联系电话</th>
+                <th>状态</th>
+                <th>录入时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {notempty name="_list"}
+            {foreach name="_list" item="vo"}
+            <tr {if $vo.status==-1}style="color:#ccc"{/if}>
+                <td align="center">
+                    {if $vo.status==1}
+                    <input type="radio" name="is_leader" value="{$vo.id}-{$vo.name}-{$vo.status}" {:$vo['is_leader']=='1'?"checked":""} lay-filter="is_leader">
+                    {else/}
+                    —
+                    {/if}
+                </td>
+                <td class="configleng">{$key+1}</td>
+                <td class="configleng">{$vo.name}</td>
+                <td>{$vo.province}{$vo.city}{$vo.district}{$vo.town}{$vo.address}</td>
+                <td>{$vo.shop_phone}</td>
+                <td>{$vo.contact_name}</td>
+                <td>{$vo.contact_phone}</td>
+                <td>{$vo.status_text}</td>
+                <td>{$vo.create_time_text}</td>
+                <td>
+                    <a data-url="{:url('edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit" style="margin-bottom: 10px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 详情</a>
+                    {if $vo.status==1}
+                    <a href="{:url('del',['id'=>$vo['id']])}" class="layui-btn layui-btn-danger layui-btn-xs ajax-delete" style="margin-left: 0px"><i class="fa fa-trash" aria-hidden="true"></i> 删除</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {else/}
+            <tr>
+                <td colspan="10" style="text-align: center">暂无数据~</td>
+            </tr>
+            {/notempty}
+        </tbody>
+    </table>
+    <!--分页-->
+    {$_list->render()}
+</form>

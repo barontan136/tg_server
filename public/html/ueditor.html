@@ -1,0 +1,192 @@
+<div style="display:none" id="think_upload_ueidetor"></div>
+<script src="__JS__/ueditor/ueditor.config.js"></script>
+<script src="__JS__/ueditor/ueditor.all.min.js"></script>
+<script>
+    var uconfig = {};
+//    var uploadEditor = UE.getEditor('think_upload_ueidetor');
+//    window.uploadEditor = uploadEditor;
+    var methods = {
+        getConfig:function(){
+             $.ajaxSettings.async = false
+             $.getJSON("{:WEB_PATH}/html/uconfig.json",function(data){
+                uconfig = data;
+             })
+        },
+        //初始化一个编辑器
+        simple: function (id, base) {
+            var config = {
+                allowDivTransToP: false
+            }
+            if (typeof (base) !== "defined") {
+                config = {
+                    toolbars: [[
+                            'source', //源代码
+                            'undo', //撤销
+                            'redo', //重做
+                            'fontfamily', //字体
+                            'fontsize', //字号
+                            'paragraph', //段落格式
+                            'bold', //加粗
+                            'italic', //斜体
+                            'underline', //下划线
+                            'forecolor', //字体颜色
+                            'backcolor', //背景色
+                            'indent', //首行缩进
+                            'justifyleft', //居左对齐
+                            'justifyright', //居右对齐
+                            'justifycenter', //居中对齐
+                            'justifyjustify', //两端对齐
+                            'formatmatch', //格式刷
+                            'autotypeset', //自动排版
+                            'simpleupload', //单图上传
+                            'insertimage', //多图上传
+                            'removeformat', //清除格式
+                            'link', //超链接
+                            'unlink', //取消链接
+                            'emotion', //表情
+                            'map', //Baidu地图
+                            'imagenone', //默认
+                            'imageleft', //左浮动
+                            'imageright', //右浮动
+                            'imagecenter', //居中
+                            'lineheight', //行间距
+                            'inserttable' //插入表格
+                        ]],
+                    topOffset: 0,
+                    wordCount: false,
+                    maxInputCount: 0,
+                    minFrameHeight: 500,
+                    enableAutoSave: true,
+                    autoFloatEnabled: true,
+                    autoHeightEnabled: true,
+                    initialFrameWidth: null,
+                    initialFrameHeight: "110%",
+                    elementPathEnabled: false,
+                    catchRemoteImageEnable: false,
+                    allowDivTransToP: false, //组织div转换成p
+                    imageAllowFiles: uconfig.imageAllowFiles,
+                    imageMaxSize: uconfig.imageMaxSize,
+                    fileAllowFiles: uconfig.fileAllowFiles,
+                    fileMaxSize: uconfig.fileMaxSize,
+                }
+            };
+            var ue = UE.getEditor(id, config);
+            return ue;
+        },
+        //选择弹出框
+        route: function (config) {
+            var method = typeof (config.method) == "undefined" ? 'moreupload' : config.method;
+            switch (method) {
+                case "moreupload":
+                    methods.moreupload(config.ue,config);
+                    break;
+                case "fileupload":
+                    methods.fileupload(config.ue,config);
+                    break;
+            }
+        },
+        //图片上传
+        moreupload: function (uploadEditor,config) {
+            var uploadNum = 0;
+            var ext,maxSize;
+            //自定义上传图片类型
+            if (typeof (config.ext) != "undefined") {
+                uconfig.imageAllowFiles = ext =  config.ext.split(",");
+            } else {
+                ext = uconfig.imageAllowFiles;
+            }
+            //自定义上传图片大小
+            if (typeof (config.size) != "undefined") {
+                uconfig.imageMaxSize = maxSize = config.size;
+            } else {
+                maxSize = uconfig.imageMaxSize;
+            }
+            uploadEditor.execCommand('serverparam');
+            uploadEditor.execCommand('serverparam', function (editor) {
+                return {
+                    img_width: config.img_width,
+                    img_height: config.img_height,
+                    ext: ext,
+                    maxSize: maxSize,
+                }
+            });
+            uploadEditor.addListener('beforeInsertImage', function (t, arg) {
+                if (uploadNum == 0) {
+                    config.success(arg);
+                    uploadNum++
+                }
+            });
+            (uploadEditor.getDialog("insertimage")).open();
+        },
+        //附件上传
+        fileupload: function (uploadEditor,config) {
+            uploadEditor.reset();
+            var fileNum = 0;
+            //自定义上传图片类型
+             var ext,maxSize;
+             config.ext = '.mp4';
+            if (typeof (config.ext) != "undefined") {
+                uconfig.fileAllowFiles = ext = config.ext.split(",");
+            } else {
+                ext = uconfig.fileAllowFiles;
+            }
+            //自定义上传图片大小
+            if (typeof (config.size) != "undefined") {
+                uconfig.fileMaxSize = maxSize = config.size;
+            } else {
+                 maxSize = uconfig.fileMaxSize;
+            }
+            uploadEditor.execCommand('serverparam');
+            uploadEditor.execCommand('serverparam', function (editor) {
+                log(uploadEditor.getOpt('fileAllowFiles'));
+                return {
+                    ext: ext,
+                    time:config.time,
+                    maxSize: maxSize,
+                }
+            });
+            uploadEditor.addListener('afterUpfile', function (t, arg) {
+                if (fileNum == 0) {
+                    config.success(arg);
+                    fileNum++
+                }
+            });
+            var dialog = (uploadEditor.getDialog("attachment"));
+                dialog.open();
+        }
+    };
+    $.fn.thinkupload = function (options) {
+        var _this = this;
+        var _uphtml = $("#think_upload_ueidetor_"+this.attr('id'));
+        if(_uphtml.length <= 0){
+            $("#think_upload_ueidetor").append('<div style="display:none" id="think_upload_ueidetor_'+this.attr('id')+'"></div>')
+        }
+        var showmenu = true;
+        var showpt = true;
+        if(typeof options === 'object' && typeof options.showmenu !== "undefined"){
+            showmenu = false;
+        }
+        if("{:session('admin_id')}"!==""){
+            showpt = false;
+        }
+        var uploadEditor = UE.getEditor('think_upload_ueidetor_'+_this.attr('id'),{showmenu:showmenu,showpt:showpt});
+         uploadEditor.ready(function () {
+                        uploadEditor.hide();
+         });
+        methods.getConfig();
+            if (typeof options === 'object') {
+                this.unbind('click').click(function () {
+                        options.ue = uploadEditor;
+                        if (typeof (options.img_width) == "undefined") {
+//                        options.img_width = $(this).attr('img_width');
+//                        options.img_height = $(this).attr('img_height');
+                       }
+                       return methods.route.call(this, options);
+                })
+            } else {
+                var id = _this.attr('id');
+                var base = _this.attr('base');
+                return methods.simple.call(this, id, base);
+            }
+    }
+</script>

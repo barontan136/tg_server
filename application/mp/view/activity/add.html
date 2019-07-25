@@ -1,0 +1,803 @@
+{extend name="base" /}
+{block name="body"}
+<style>
+    .remove-img{
+        position: relative;color: #ff5722;z-index: 555;left:-25px;top: -32px;
+        font-size: 20px;
+    }
+    .w70{
+        width: 70% !important
+    }
+</style>
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">平台菜单</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab" lay-filter="tab-config-title">
+                <ul class="layui-tab-title" id="tabHeader">
+                    <li class="layui-this">基本信息</li>
+                    <li>活动设置</li>
+                    <li>页面设置</li>
+                    <li>分享设置</li>
+                    <!--<li>分享红包</li>-->
+                </ul>
+                <div class="layui-tab-content" id="tabBody">
+                    <form class="layui-form form-container" action="{:url('add')}" method="post">
+                        <div class="layui-tab-item layui-show tag-item-0">
+                            <input type="hidden" name ="base[id]" value="{$base.id|default=''}">
+
+                            {notempty name="$base.base_url_qrcode"}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">母链接二维码:</label>
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        <span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px;float:left;" src="{:getCover($base.base_url_qrcode)}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            {/notempty}
+
+                            {notempty name="$base.order_url_qrcode"}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">老师二维码:</label>
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        <span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px;float:left;" src="{:getCover($base.order_url_qrcode)}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            {/notempty}
+
+                            {notempty name="$base.order_url_admin_qrcode"}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">店长二维码:</label>
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        <span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px;float:left;" src="{:getCover($base.order_url_admin_qrcode)}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            {/notempty}
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动名称</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="base[activity_name]" value="{$base.activity_name|default=''}"    placeholder="请填写活动名称" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动描述</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="base[activity_content]" value="{$base.activity_content|default=''}"    placeholder="描述,不要换行" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span class="must_tip"> *</span>活动类型</label>
+                                <div class="layui-input-inline w70">
+                                    {neq name='type' value='edit'}
+                                    <input type="radio" name="base[act_type]"  value="1"  {eq name="$base.act_type|default='1'" value='1'} checked="" {/eq}  title="团购">
+                                    <input type="radio" name="base[act_type]"  value="2" {eq name="$base.act_type|default='1'" value='2'}checked="" {/eq} title="单独购买">
+                                    <input type="radio" name="base[act_type]"  value="3" {eq name="$base.act_type|default='1'" value='3'}checked="" {/eq} title="兼职">
+                                    {else /}
+                                    <input type="hidden" name="base[act_type]" required  value="{$base.act_type}">
+                                    <p style=" margin-top: 7px;">{$base.act_type_name}</p>
+                                    {/neq}
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">分享图标</label>
+                                <span class="must_tip"> 建议100*100 多张图片只取最后一张</span>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        {notempty name="$base.activity_img"}
+                                        <span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($base.activity_img)}">
+                                            <input type="hidden" name="activity_img[]" required  value="{$base.activity_img||default=''}">
+                                            <div remove-img-activity_img class="fa fa fa-times-circle remove-img"></div></span>
+                                        {/notempty}
+                                    </div>
+                                    <button type="button" id="activity_img_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>选择图片</button>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动电话</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="base[activity_telephone]" value="{$base.activity_telephone|default=''}"    placeholder="活动联系人的电话" autocomplete="off" class="layui-input">
+                                    <!--<span >活动联系人的电话</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">日期时间范围</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" class="layui-input" name='base[activity_time]' id="activity_time" placeholder="请选择日期和时间">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span class="must_tip"> *</span>活动状态</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="radio" name="base[status]"  value="0"  {eq name="$base.status|default='0'" value='0'} checked="" {/eq}  title="暂停">
+                                           <input type="radio" name="base[status]"  value="1" {eq name="$base.status|default='0'" value='1'}checked="" {/eq} title="启用">
+                                           <input type="radio" name="base[status]"  value="-1" {eq name="$base.status|default='0'" value='-1'}checked="" {/eq} title="结束">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item tag-item-1">
+                            <input type="hidden" name ="config[id]" value="{$config.id|default=''}">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">开团金额</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[create_amount]" value="{$config.create_amount|default=''}"    placeholder="请填写开团金额 粉丝开团做团长的金额，如果团长免单，则设置数字0 单位：元" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">参团金额</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[join_amount]" value="{$config.join_amount|default=''}"    placeholder="粉丝参团做团员的付款的金额，必须大于0元，单位：元" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">成团人数</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[group_number]" value="{$config.group_number|default=''}"    placeholder="满多少个团员组团成功，填大于0的整数" autocomplete="off" class="layui-input">
+                                    <span class='mat_tip'>注意：是团员的人数，不包括团长，活动开启之后，不要修改。</span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">成团价格</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[group_amount]" value="{$config.group_amount|default=''}"    placeholder="【展示作用】，表示拼团成功后可享受的折扣价格" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">产品原价</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[old_amount]" value="{$config.old_amount|default=''}"    placeholder="【展示作用】，表示产品原价" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">开团总数</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[max_number]" value="{$config.max_number|default=''}"    placeholder="活动中开团数量限制，超过数量则提示不能开团，如果不限制则设置数字0或为空" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">虚拟浏览</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[sham_view]" value="{$config.sham_view|default=''}"    placeholder="展示值=真+假" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">真实头像数</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[header_img_number]" value="{$config.header_img_number|default=''}"    placeholder="用于展示真实的参与头像数【团长团员都算】" autocomplete="off" class="layui-input">
+                                    <span class=''>注意：不需要展示很多，太多了页面加载速度肯定变慢的，建议7（一行）的倍数个。</span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">虚拟开团</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[sham_group_number]" value="{$config.sham_group_number|default=''}"    placeholder="团长(即已开团的总值)总数的页面展示值=真实 + 虚拟开团" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">虚拟参加</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[sham_jion_group_number]" value="{$config.sham_jion_group_number|default=''}"    placeholder="活动的参与人数的展示值=真实 + 虚拟参加" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">主办方</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[sponsor]" value="{$config.sponsor|default=''}"    placeholder="举办方" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">客服姓名</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[dcrc_name]" value="{$config.dcrc_name|default=''}"    placeholder="底部电话图标点击出现的活动联系人姓名" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">客服二维码</label>
+                                <span class="must_tip"> 多张图片只取最后一张</span>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        {notempty name="$config.dcrc_qrcode"}
+                                        <span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($config.dcrc_qrcode)}">
+                                            <input type="hidden" name="dcrc_qrcode[]" required  value="{$config.dcrc_qrcode||default=''}">
+                                            <div remove-img-activity_img class="fa fa fa-times-circle remove-img"></div></span>
+                                        {/notempty}
+                                    </div>
+                                    <button type="button" id="dcrc_qrcode_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>选择图片</button>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">支付后URL</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="config[pay_url]" value="{$config.pay_url|default=''}"    placeholder="支付后的跳转URL，不设置默认跳转到活动页面" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--页面设置-->
+                        <div class="layui-tab-item tag-item-2">
+                            <input type="hidden" name ="page_config[id]" value="{$page_config.id|default=''}">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">顶部背景颜色</label>
+                                <div class="layui-input-inline w70">
+                                    <div style="margin-left: 30px;">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline" style="width: 120px;">
+                                                <input type='text' name="page_config[top_color]" value="{$page_config.top_color||default=''}" placeholder="请选择颜色" class="layui-input" id="top_color-input" readonly="">
+                                            </div>
+                                            <div class="layui-inline" style="left: -11px;">
+                                                <div id="top_color"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">拼团背景色</label>
+                                <div class="layui-input-inline w70">
+                                    <div style="margin-left: 30px;">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline" style="width: 120px;">
+                                                <input type='text' name="page_config[tg_color]" value="{$page_config.tg_color||default=''}" placeholder="请选择颜色" class="layui-input" id="tg_color-input" readonly="">
+                                            </div>
+                                            <div class="layui-inline" style="left: -11px;">
+                                                <div id="tg_color"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">成团背景色</label>
+                                <div class="layui-input-inline w70">
+                                    <div style="margin-left: 30px;">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline" style="width: 120px;">
+                                                <input type='text' name="page_config[group_color]" value="{$page_config.group_color||default=''}" placeholder="请选择颜色" class="layui-input" id="group_color-input" readonly="">
+                                            </div>
+                                            <div class="layui-inline" style="left: -11px;">
+                                                <div id="group_color"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">佣金背景色</label>
+                                <div class="layui-input-inline w70">
+                                    <div style="margin-left: 30px;">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline" style="width: 120px;">
+                                                <input type='text' name="page_config[brokerage_color]" value="{$page_config.brokerage_color||default=''}" placeholder="请选择颜色" class="layui-input" id="brokerage_color-input" readonly="">
+                                            </div>
+                                            <div class="layui-inline" style="left: -11px;">
+                                                <div id="brokerage_color"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--客服图标-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">客服图标</label>
+                                <span class="must_tip"> 建议48*48 多张图片只取最后一张</span>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        {notempty name="$page_config.dcrc_icon"}
+                                        <span><img img_view style="width:96px;height:96px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($page_config.dcrc_icon)}">
+                                            <input type="hidden" name="dcrc_icon[]" required  value="{$page_config.dcrc_icon||default=''}">
+                                            <div remove-img-dcrc_icon class="fa fa fa-times-circle remove-img"></div></span>
+                                        {/notempty}
+                                    </div>
+                                    <button type="button" id="dcrc_icon_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>选择图片</button>
+                                </div>
+                            </div>
+                            <!--订单图标-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">订单图标</label>
+                                <span class="must_tip"> 建议48*48 多张图片只取最后一张</span>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        {notempty name="$page_config.order_icon"}
+                                        <span><img img_view style="width:96px;height:96px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($page_config.order_icon)}">
+                                            <input type="hidden" name="order_icon[]" required  value="{$page_config.order_icon||default=''}">
+                                            <div remove-img-order_icon class="fa fa fa-times-circle remove-img"></div></span>
+                                        {/notempty}
+                                    </div>
+                                    <button type="button" id="order_icon_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>选择图片</button>
+                                </div>
+                            </div>
+                            <!--海报图标-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">海报图片</label>
+                                <span class="must_tip"> 建议640*1009(不限) 多张图片只取最后一张</span>
+
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        {notempty name="$page_config.poster_image"}
+                                        <span><img img_view style="width:128px;height:202px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($page_config.poster_image)}">
+                                            <input type="hidden" name="poster_image[]" required  value="{$page_config.poster_image||default=''}">
+                                            <div remove-img-poster_image class="fa fa fa-times-circle remove-img"></div></span>
+                                        {/notempty}
+                                    </div>
+                                    <button type="button" id="poster_image_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>选择图片</button>
+                                </div>
+                            </div>
+                            <!--背景音乐-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">背景音乐</label>
+                                <div class="layui-input-inline w70">
+                                    <div class="layui-form-item">
+                                        <div>
+                                            <input type="hidden" name="bg_music[]" required value="{$page_config.bg_music||default=''}">
+                                        </div>
+                                        <button type="button" class="layui-btn" id="bg_music"><i class="layui-icon"></i>上传音频</button>
+                                    </div>
+                                    <!--<span >活动联系人的电话</span>-->
+                                </div>
+                            </div>
+                            <!--顶部图片-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">顶部图片</label>
+                                <span class="must_tip"> 建议640*1009(不限) 多张图片只取最后一张</span>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <div style="max-width:800px">
+                                        {notempty name="$page_config.top_image"}
+                                        <span><img img_view style="width:128px;height:202px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="{:getCover($page_config.top_image)}">
+                                            <input type="hidden" name="top_image[]" required  value="{$page_config.top_image||default=''}">
+                                            <div remove-img-top_image class="fa fa fa-times-circle remove-img"></div></span>
+                                        {/notempty}
+                                    </div>
+                                    <button type="button" id="top_image_images" class="layui-btn layui-btn-xs"><i class="layui-icon"></i>选择图片</button>
+                                </div>
+                            </div>
+                            <!--文本编辑-->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动图文描述</label>
+                                <div class="layui-input-inline w70">
+                                    <textarea name='page_config[bottom_content]'  base id="content">{$page_config.bottom_content||default=''}</textarea>
+                                </div>
+                                <div class="layui-input-inline w70"  style="text-align: center; margin-top: 15px;">
+                                    <span class="must_tip">描述中上传的图片仅支持jpg/png格式，大小必须在1MB以下</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--分享设置-->
+                        <div class="layui-tab-item tag-item-3">
+                            <input type="hidden" name ="share[id]" value="{$share.id|default=''}">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span class="must_tip"> *</span>是否禁止分享</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="radio" name="share[status]"  value="1"  {eq name="$share.status|default='1'" value='1'}checked="" {/eq} title="允许">
+                                           <input type="radio" name="share[status]"  value="0"  {eq name="$share.status|default='1'" value='0'} checked="" {/eq}  title="禁止">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">转发标题1</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="share[share_title_single]" value="{$share.share_title_single|default=''}"    placeholder="未参团的粉丝分享时的标题，NICK表示昵称" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">转发标题2</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="share[share_title_circle]" value="{$share.share_title_single|default=''}"    placeholder="团长或团员分享时的标题，NICK表示昵称，NAME表示姓名" autocomplete="off" class="layui-input">
+                                    <!--<span class=''>活动未开始时的提醒</span>-->
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">分享数量限制</label>
+                                <div class="layui-input-inline w70">
+                                    <input type="text" name="share[share_number]" value="{$share.share_number|default=''}"    placeholder="表示24小时内的有效分享次数，多了无效" autocomplete="off" class="layui-input">
+                                    <span class=''>0为不限制，若设置1 则表示24小时内有效分享次数最多为1，多了无效</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="layui-tab-item tag-item-4">内容5</div>-->
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{/block}
+
+{block name='script'}
+{include file="html/ueditor.html" /}
+<script>
+//    //手动切换选项卡
+    layui.use('element', function () {
+        var element = layui.element;
+        var $ = layui.jquery;
+        element.on('tab(tab-config-title)', function (data) {
+            $(".layui-tab-item").each(function () {
+                $(this).removeClass('layui-show');
+            });
+            $(".tag-item-" + data.index).removeClass('layui-show').addClass('layui-show');
+        });
+    });
+
+
+
+    laydate.render({
+        elem: '#activity_time'
+        , type: 'datetime'
+        , range: true
+    });
+    //分享图标上传
+    var activity_img_images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img-activity_img]', function () {
+        $(this).parent().remove();
+        activity_img_images_length--;
+    });
+    //商户缩略图    
+    var activity_img_images_length = $("input[type='hidden'][name='activity_img[]']").length;
+
+    $('#activity_img_images').thinkupload({success: function (data) {
+            var _this = $('#activity_img_images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html = '<span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="activity_img[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img-activity_img class="fa fa fa-times-circle remove-img"></div></span>';
+                if (activity_img_images_length < 1) {
+                    _this.prev().append(html);
+                    activity_img_images_length++;
+                } else {
+                    layer.msg('只能上传一张图片,请删除原图后重试');
+                    return false;
+                }
+            });
+        }});
+    //客服二维码
+    var dcrc_qrcode_images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img-dcrc_qrcode]', function () {
+        $(this).parent().remove();
+        dcrc_qrcode_images_length--;
+    });
+    //商户缩略图    
+    var dcrc_qrcode_images_length = $("input[type='hidden'][name='dcrc_qrcode[]']").length;
+
+    $('#dcrc_qrcode_images').thinkupload({success: function (data) {
+            var _this = $('#dcrc_qrcode_images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html = '<span><img img_view style="width:100px;height:100px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="dcrc_qrcode[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img-dcrc_qrcode class="fa fa fa-times-circle remove-img"></div></span>';
+                if (dcrc_qrcode_images_length < 1) {
+                    _this.prev().append(html);
+                    dcrc_qrcode_images_length++;
+                } else {
+                    layer.msg('只能上传一张图片,请删除原图后重试');
+                    return false;
+                }
+            });
+        }});
+
+
+//页面设置
+    //顶部背景颜色
+    layui.use('colorpicker', function () {
+        var colorpicker = layui.colorpicker;
+        //渲染
+        colorpicker.render({
+            elem: '#top_color'  //绑定元素
+        });
+        colorpicker.render({
+            elem: '#top_color'
+            , color: "{$page_config.top_color||default='#1c97f5'}"
+            , done: function (color) {
+                console.log(color);
+                $('#top_color-input').val(color);
+            }
+        });
+    });
+    //拼团背景色
+    layui.use('colorpicker', function () {
+        var colorpicker = layui.colorpicker;
+        //渲染
+        colorpicker.render({
+            elem: '#tg_color'  //绑定元素
+        });
+        colorpicker.render({
+            elem: '#tg_color'
+            , color: "{$page_config.tg_color||default='#1c97f5'}"
+            , done: function (color) {
+                console.log(color);
+                $('#tg_color-input').val(color);
+            }
+        });
+    });
+    //成团背景色
+    layui.use('colorpicker', function () {
+        var colorpicker = layui.colorpicker;
+        //渲染
+        colorpicker.render({
+            elem: '#group_color'  //绑定元素
+        });
+        colorpicker.render({
+            elem: '#group_color'
+            , color: "{$page_config.group_color||default='#1c97f5'}"
+            , done: function (color) {
+                console.log(color);
+                $('#group_color-input').val(color);
+            }
+        });
+    });
+    //佣金背景色
+    layui.use('colorpicker', function () {
+        var colorpicker = layui.colorpicker;
+        //渲染
+        colorpicker.render({
+            elem: '#brokerage_color'  //绑定元素
+        });
+        colorpicker.render({
+            elem: '#brokerage_color'
+            , color: "{$page_config.brokerage_color||default='#1c97f5'}"
+            , done: function (color) {
+                console.log(color);
+                $('#brokerage_color-input').val(color);
+            }
+        });
+    });
+    //客服图标
+    var dcrc_icon_images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img-dcrc_icon]', function () {
+        $(this).parent().remove();
+        dcrc_icon_images_length--;
+    });
+    //客服图标    
+    var dcrc_icon_images_length = $("input[type='hidden'][name='dcrc_icon[]']").length;
+
+    $('#dcrc_icon_images').thinkupload({success: function (data) {
+            var _this = $('#dcrc_icon_images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html = '<span><img img_view style="width:96px;height:96px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="dcrc_icon[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img-dcrc_icon class="fa fa fa-times-circle remove-img"></div></span>';
+                if (dcrc_icon_images_length < 1) {
+                    _this.prev().append(html);
+                    dcrc_icon_images_length++;
+                } else {
+                    layer.msg('只能上传一张图片,请删除原图后重试');
+                    return false;
+                }
+            });
+        }});
+    //订单图标
+    var order_icon_images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img-order_icon]', function () {
+        $(this).parent().remove();
+        order_icon_images_length--;
+    });
+    //订单图标    
+    var order_icon_images_length = $("input[type='hidden'][name='order_icon[]']").length;
+
+    $('#order_icon_images').thinkupload({success: function (data) {
+            var _this = $('#order_icon_images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html = '<span><img img_view style="width:96px;height:96px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="order_icon[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img-order_icon class="fa fa fa-times-circle remove-img"></div></span>';
+                if (order_icon_images_length < 1) {
+                    _this.prev().append(html);
+                    order_icon_images_length++;
+                } else {
+                    layer.msg('只能上传一张图片,请删除原图后重试');
+                    return false;
+                }
+            });
+        }});
+    //海报图标
+    var poster_image_images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img-poster_image]', function () {
+        $(this).parent().remove();
+        poster_image_images_length--;
+    });
+    //海报图标    
+    var poster_image_images_length = $("input[type='hidden'][name='poster_image[]']").length;
+
+    $('#poster_image_images').thinkupload({success: function (data) {
+            var _this = $('#poster_image_images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html = '<span><img img_view style="width:128px;height:201px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="poster_image[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img-poster_image class="fa fa fa-times-circle remove-img"></div></span>';
+                if (poster_image_images_length < 1) {
+                    _this.prev().append(html);
+                    poster_image_images_length++;
+                } else {
+                    layer.msg('只能上传一张图片,请删除原图后重试');
+                    return false;
+                }
+            });
+        }});
+
+    //上传音乐
+    layui.use('upload', function () {
+        var $ = layui.jquery;
+        var _this = $('#bg_music');
+        let html = '';
+        upload = layui.upload;
+        upload.render({
+            elem: '#bg_music'
+            , url: "{:url('music_upload')}"
+            , accept: 'file' //音频audio
+            , done: function (res) {
+                console.log(res)
+                console.log(res.data.path)
+                html = ' <input type="hidden" name="bg_music[]" value="' + res.data.path + '">';
+                _this.prev().append(html);
+                layer.msg('上传成功');
+            }
+        });
+    });
+    //顶部图片
+    var top_image_images_length = 0;
+    //删除图片
+    $('body').on('click', '[remove-img-top_image]', function () {
+        $(this).parent().remove();
+        top_image_images_length--;
+    });
+    //海报图标    
+    var top_image_images_length = $("input[type='hidden'][name='top_image[]']").length;
+
+    $('#top_image_images').thinkupload({success: function (data) {
+            var _this = $('#top_image_images');
+            let html = '';
+            $.each(data, function (i, v) {
+                html = '';
+                html = '<span><img img_view style="width:128px;height:201px;margin-bottom:5px;border-radius: 5px;object-fit: cover;margin-right:10px" src="' + v.src + '">\n\
+                                     <input type="hidden" name="top_image[]" value="' + v.cover_id + '">\n\
+                                     <div remove-img-top_image class="fa fa fa-times-circle remove-img"></div></span>';
+                if (top_image_images_length < 1) {
+                    _this.prev().append(html);
+                    top_image_images_length++;
+                } else {
+                    layer.msg('只能上传一张图片,请删除原图后重试');
+                    return false;
+                }
+            });
+        }});
+
+    //编辑器
+    $(function () {
+        var editor = $('#content').thinkupload();
+        editor.ready(function () {
+            var $item;
+            var $form = $('form[name="news"]'), $body = $('body');
+            /*! 数据提交 */
+
+            /*! 输入标题显示 */
+            $form.find('[name="title"]').on('keyup', function () {
+                if ($item) {
+                    $item.find('.news-title').html(this.value).show();
+                    $item.find('.right-text').html(this.value).show();
+                }
+            });
+
+            /*! 同步编辑器 */
+            function syncEditor($pItem) {
+                // 处理上一个编辑器
+                if ($form && $pItem && $pItem.size() > 0) {
+                    var data = {};
+                    data.content = editor.getContent() || '';
+                    $pItem.data('item', data), $form.submit();
+                    if ($form.find('input.validate-error').size() > 0 || data.content.length < 1) {
+                        ((data.content || '').length < 1) && editor.setContent('文章内容不能留空，请输入内容！');
+                        $pItem.addClass('active').siblings().removeClass('active');
+                        return true;
+                    }
+                }
+                return true;
+            }
+
+            /*! 显示编辑器 */
+            function showEditor() {
+                // 读取对象数据
+                $item = $('.news-item.active');
+                this.get = function () {
+                    var data = $item.data('item') || {};
+                    data.content = data.content || '';
+                    return data;
+                };
+                // 重置表单
+                $form.get(0).reset();
+                // 获取当前数据
+                var data = this.get();
+                for (var i in data) {
+                    if (i !== 'content' && i !== 'show_cover_pic') {
+                        $form.find('[name="' + i + '"]').val(data[i]).trigger('change');
+                    }
+                }
+                if (parseInt(data.show_cover_pic) === 1) {
+                    $form.find('[name="show_cover_pic"]').get(0).checked = true;
+                }
+                editor.setContent(data.content);
+            }
+
+            /**
+             * 图片上传
+             */
+            function uploadpic() {
+                $('#data-file').thinkupload({
+                    // method:"moreupload",
+                    size: 2048000,
+                    success: function (data) {
+                        {
+                            $.each(data, function (i, v) {
+                                syncEditor($('.news-item.active'))
+                                return false;
+                            })
+                        }
+                    }
+                })
+            }
+            /*! 默认显示第一个 */
+            uploadpic();
+        });
+    });
+</script>
+{/block}

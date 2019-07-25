@@ -1,0 +1,53 @@
+{extend name="base" /}
+{block name="title"}管理员登录{/block}
+{block name="body"}
+<div class="weui-msg">
+    <div class="weui-msg__icon-area"><img src="{$wxUser.headimgurl}" style="width: 70px;border-radius: 50%"></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">{$wxUser.nickname}</h2>
+        <p class="weui-msg__desc">尊敬的：{$wxUser.nickname}，您将登录【{$merchant.name}】，是否同意？</p>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="javascript:;" data-type='4' class="weui-btn weui-btn_primary" >同意登录</a>
+            <a href="javascript:" data-type='3' class="weui-btn weui-btn_default">不同意登录</a>
+        </p>
+    </div>
+    <div class="weui-msg__extra-area">
+        <div class="weui-footer">
+            <p class="weui-footer__links">
+                <a href="javascript:void(0);" class="weui-footer__link">{:config('site_title')}</a>
+            </p>
+            <p class="weui-footer__text">Copyright &copy; 2018 {:config('site_title')}</p>
+        </div>
+    </div>
+</div>
+
+<div id="toast" style="display: none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast" style="height: auto;min-height: 0px">
+        <p class="weui-toast__content" style="margin:5px auto;"></p>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    $('[data-type]').click(function () {
+        var loading = weui.loading('登录中...')
+        var self = $(this);
+        $.post('{:url()}', {scan_id: '{$scan_record.id}',type:self.data('type')}, function (d) {
+            loading.hide();
+            weui.toast(d.msg, {
+                callback: function () {
+                    if (d.code == 1) {
+                        closeWx();
+                    }
+                }
+            });
+        }, 'JSON')
+    })
+    function closeWx() {
+        WeixinJSBridge.call('closeWindow');
+    }
+</script>
+{/block}

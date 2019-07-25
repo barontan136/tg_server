@@ -1,0 +1,73 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <!--<ul class="layui-tab-title">-->
+            <!--<li class="layui-this">红包管理</li>-->
+        <!--</ul>-->
+
+
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li><a href="{:url('ActivityData/index',['act_id'=>$input_data.act_id])}">拼团管理</a></li>
+                <li class="layui-this"> <a href="{:url('ActivityData/rplist',['act_id'=>$input_data.act_id])}">红包管理</a> </li>
+                <li> <a href="{:url('ActivityData/visitlist',['act_id'=>$input_data.act_id])}">浏览管理</a> </li>
+                <li> <a href="{:url('ActivityData/refuserlist',['act_id'=>$input_data.act_id])}">老师管理</a> </li>
+            </ul>
+        </div>
+
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get" id="search">
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">支付状态</label>
+                        <div class="layui-input-inline" style="width: 200px;">
+                            <select name="status" lay-filter="aihao">
+                                <option value="0" {eq name="input_data.status" value="0"}selected{/eq}>不限</option>
+                                <option value="1" {eq name="input_data.status" value="1"}selected{/eq}>未支付</option>
+                                <option value="2" {eq name="input_data.status" value="2"}selected{/eq}>已支付</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">关键字</label>
+                        <div class="layui-input-inline" style="width: 200px;">
+                            <input type="text" name="keywords" value="{$input_data.keywords|default=''}" placeholder="--昵称,用户,手机号--" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-sm"><i class="fa fa-search" aria-hidden="true"></i>查询</button>
+                    </div>
+                    <div class="layui-inline">
+                        <!--<button class="layui-btn layui-btn-sm"><i class="fa fa-file" aria-hidden="true"></i>导出</button>-->
+                    </div>
+                    <input type="hidden" name="act_id" value="{$input_data.act_id}">
+
+                </form>
+            </blockquote>
+
+            <div class="layui-tab-item layui-show"  data-form-parent>
+                 {include file="activity_data/rplstajax"/}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+    substring('good_name', 10);
+</script>
+{/block}

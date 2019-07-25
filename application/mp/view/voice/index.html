@@ -1,0 +1,198 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" href="__CSS__/bootstrap.min.css">
+<link rel="stylesheet" href="__CSS__/wechat.css">
+<script src="__JS__/masonry.min.js"></script>
+<style>
+    #news_box {position:relative;width: 100%}
+    #news_box .news_item {position:relative;left:0;top:0;padding:5px;border:1px solid #ccc;box-sizing:content-box;margin:10px 0px 10px 0px;width:160px}
+    #news_box .news_item .news_articel_item{background-position:center center;background-size:100%;position:relative;height:230px;width:100%;overflow:hidden;}
+    #news_box .news_item .news_articel_item p div{padding:5px;max-height:30px;font-size:12px;color:#000;overflow:hidden;text-overflow:ellipsis;background:#eee;position:absolute;width:100%;bottom:0;margin:0}
+    #news_box .news_item .news_articel_item p div span{overflow:hidden;text-overflow:ellipsis;width:90%;bottom:0;margin:0}
+    #news_box .news_item .news_articel_item p div i{top:-18px}
+    #news_box .news_item .news_articel_item.other{height:50px;padding:5px 0;}
+    #news_box .news_item .news_articel_item .left-image{width:50px;height:50px;position:relative;float:left;background-position:center center;background-size:100%;overflow:hidden;}
+    #news_box .news_item .news_articel_item .right-text{float:left;width:130px;padding-right:10px;overflow:hidden;text-overflow:ellipsis;}
+    #news_box .news_item .hr-line-dashed:last-child{display:none}
+    #news_box .hr-line-dashed{margin:6px 0 1px 0}
+    #news_box .news_tools{top:0;z-index:80;color:#fff;width:170px;margin-left:-6px;position:absolute;background:rgba(0,0,0,0.7);text-align:right;padding:0 5px;line-height:38px;}
+    #news_box .news_tools a{color:#fff;margin-left:10px}
+    .news_box_title{width: 100%;height: 50px;line-height: 50px;}
+    .news_box_title1{width: 100%;height: 50px;line-height: 50px;border-bottom: 1px #e7e7eb solid;background-color: #f4f5f9}
+    .layui-row{padding: 5px;padding-left: 10px;font-size: 14px;width: 200px}
+    .cur{background: #eee}
+    .pagination li { width:30px;}
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">音频素材</li>
+        </ul>
+       <div class="layui-tab-content" style="border:1px solid #ccc;width:99%;height: 950px">
+           <div class="layui-tab-item layui-show">
+                <div class="news_box_title">
+                  <div style="width:100%;text-align: right;padding:10px"><span style="float:left"></span><a style="margin-bottom: 10px;" id="upload" class="layui-btn  layui-btn-sm layui-btn-primary" ><i class="fa fa-upload" aria-hidden="true"></i> 本地上传</a></div>  
+                </div>
+                <div style="clear:both"></div>
+          <form action="" method="post" id="myform" class="layui-form">
+                <div class="news_box_title1" style="padding-left:10px">
+                  <input lay-skin="primary" type="checkbox"  value="" lay-filter="allChooseimg" title="全选">
+                  <a class="layui-btn layui-btn-sm layui-btn-danger" data-image-del="all">删除</a>
+                </div>
+                <div id="news_box">
+                     {foreach $_list as $vo}
+                        <div class="news_item">
+                            <div class='news_tools hide'>
+                                <a data-image-edit="{$vo.id}" data-image-name="{if $vo.name}{$vo.name}{else}{$vo.path}{/if}" href='javascript:'>编辑</a>
+                                <a data-image-del="one" href='javascript:'>删除</a>
+                            </div>
+                            <div  class='news_articel_item' data-json='{:json_encode($vo)}' data-img-view  title='标 题：{if $vo.name}{$vo.name}{else}{$vo.path}{/if} 
+路 径：{$vo.path} 
+格 式：{$vo.ext} 
+大 小：{$vo.size/1000}kb
+'>
+<!--                                <audio src="{$vo.path}" controls="controls" style="margin-top:100px"></audio>-->
+                                <div class="play fa fa-play" data-src="{$vo.path}" data-name="{if $vo.name}{$vo.name}{else}{$vo.path}{/if}" style="font-size:8em;text-align: center;width: 100%;margin-top:70px"></div>
+                                <p title="{if $vo.name}{$vo.name}{else}{$vo.path}{/if}" onclick="event.stopPropagation()"><input  type="checkbox"  lay-skin="primary" data-checkbox name="ids[]" value="{$vo.id}" title="{if $vo.name}{$vo.name}{else}{$vo.path}{/if}"></p>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                        </div>
+                        {/foreach}
+                     <div style="clear:both"></div>
+                </div>
+            </form>
+                 {$_list->render()}
+                 <!--分页-->
+             </div>
+       </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+{include file="html/ueditor.html" /}
+<script>
+    $('.news_item').each(function () {
+        $(this).find('.news_tools').removeClass('hide');
+    })
+    //水平排列
+    var container = document.querySelector('#news_box');
+    var msnry = new Masonry(container, {itemSelector: '.news_item', columnWidth:10});
+    msnry.layout();
+    
+    //全选
+    form.on('checkbox(allChooseimg)', function (data) {
+        $('[data-checkbox]').each(function (index, item) {
+            if (!$(item).attr('disabled')) {
+                item.checked = data.elem.checked;
+            }
+        });
+        form.render('checkbox');
+    });
+        
+  /**
+   * 修改音频名称
+   */
+  $('body').on('click','[data-image-edit]',function(){
+      var that = $(this);
+      var id = $(this).attr('data-image-edit');
+      var name = $(this).attr('data-image-name');
+       //prompt层
+       layer.prompt({title: '输入任何音频名称，并确认',value:name, formType: 0}, function(text, index){
+            loading(function(ind){
+                $.ajax({
+                    url:'{:url("editName")}',
+                    data:{id:id,name:text},
+                    dataType:'json',
+                    type:'post',
+                    success:function(data){
+                        closeLoading(ind);
+                        if(data.code==1){
+                            layer.msg('名称修改成功');
+                            layer.close(index);
+                            setTimeout(function(){
+                               that.parent().next().find('input').attr('title',text);
+                               form.render('checkbox')
+                            },1000)
+                        }else{
+                            layer.msg(data.msg)
+                        }
+                    }
+                })
+            });
+        });
+  })
+  
+  /**
+   * 删除音频
+   */    
+  $('body').on('click','[data-image-del]',function(){
+    var tag = $(this).attr('data-image-del');
+    if(tag=="all"){
+        if(($('[data-checkbox]:checked').length)<=0){
+            layer.msg('请至少选择一个音频');
+            return false;
+        }
+    }else{
+         $(this).closest('.news_item').find('input[type=checkbox]').attr('checked',true);
+         form.render('checkbox');
+    }
+        //询问框
+        layer.confirm('是否确认删除？', {
+          btn: ['确认','取消'] //按钮
+        }, function(){
+             loading(function(ind){
+                    $.ajax({
+                        url:'{:url("del")}',
+                        data:{ids:$('[data-checkbox]:checked').serializeArray()},
+                        dataType:'json',
+                        type:'post',
+                        success:function(data){
+                            closeLoading(ind);
+                            if(data.code==1){
+                                layer.msg('删除成功');
+                                setTimeout(function(){
+                                    location.reload();
+                                },1000)
+                            }else{
+                                layer.msg(data.msg)
+                            }
+                        }
+                    })
+                });
+        });
+})
+ $('#upload').thinkupload({method:"fileupload",ext:'.mp3,.ogg,.wma,.asf,.aac,.flac,.ape,.mid,.wav',success:function(data){
+        $.each(data,function(i,v){
+           layer.msg('上传成功');
+            setTimeout(function(){
+                location.reload();
+            },1000)
+            return false;
+        })
+}});
+/**
+ * 播放
+ */
+ $('body').on('click','div .play',function(){
+     layer.closeAll()
+     $('div .play').removeClass('fa-pause').addClass('fa-play');
+     $(this).removeClass('fa-play').addClass('fa-pause');
+     var src = $(this).attr('data-src');
+     var name = $(this).attr('data-name');
+     //捕获页
+        layer.open({
+          type: 1,
+          shade: false,
+          title: false, //不显示标题
+          content: '<p style="padding:10px">'+name+'<audio src="'+src+'" controls="controls" style="margin-top:10px" preload="auto" autoplay="autoplay" loop="loop"></audio></p>', //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+          cancel: function(){
+             $('div .play').removeClass('fa-pause').addClass('fa-play');
+          }
+        });
+ })
+</script>
+{/block}

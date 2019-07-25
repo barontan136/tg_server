@@ -1,0 +1,52 @@
+<form action="" method="post" class="ajax-form layui-form">
+
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>微信</th>
+                <th>奖金</th>
+                <th>拼团</th>
+                <th>时间</th>
+                <th>状态</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {notempty name='list'}
+            {volist name='list' id='vo' key='k'}
+            <tr>
+                <td>{$k}</td>
+                <td>
+                    <img src="{$vo.head_img}" width="28"/>
+                    <br/>{$vo.nick_name}
+                </td>
+                <td>
+                    <button class="layui-btn layui-btn-xs" style="background-color: green;" disabled>￥{$vo.rp_amount}</button>
+                </td>
+                <td>
+                    {$vo.order_user_name}/{$vo.order_mobile}<br/>
+                    【ID:{$vo.order_id}】
+                </td>
+                <td>{$vo.create_datetime}</td>
+                <td>
+                    <button class="layui-btn layui-btn-xs" style="background-color:green;" disabled>{$vo.status_name}</button>
+                </td>
+                <td>
+                    {$vo.remark}
+                </td>
+                <td>
+                    <button type="button" data-action="{:url('ActivityData/deleteRpRecord',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs ajax-action">
+                        删除
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name='list'}
+    {$list->render()}
+    {/notempty}
+</form>

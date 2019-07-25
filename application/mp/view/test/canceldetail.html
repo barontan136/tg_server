@@ -1,0 +1,133 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+    .layui-form-pane .layui-form-label {
+        width: 150px;
+    }
+    .layui-form-item .layui-input-inline {
+        width: 250px;
+    }
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">兑换订单详情</li>
+        </ul>
+        <div class="layui-tab-content">
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>兑换商品</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" value="{$info['goods_name']}" class="layui-input" disabled>
+                            </div>
+                            <label class="layui-form-label">兑换数量</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['amount']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所需积分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['bouns']}" disabled>
+                            </div>
+                            <label class="layui-form-label">配送方式</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="自提" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">下单时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['create_time']}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>支付明细</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">订单编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['id']}" disabled>
+                            </div>
+                            <label class="layui-form-label">扣除积分</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['bouns']}" disabled>
+                            </div>
+                        </div>    
+                    </form>
+
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>用户信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['customer_name']}" disabled>
+                            </div>
+                            <label class="layui-form-label">用户电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['telephone']}" disabled>
+                            </div>
+                        </div>    
+                    </form>
+
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field site-demo-button" style="margin-top: 30px;">
+                <legend>自提信息</legend>
+                <div style="margin:10px">
+                    <form class="layui-form layui-form-pane" action="{:url('')}" method="post">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自提状态</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['status_text']}" disabled>
+                            </div>
+                            <label class="layui-form-label">自提时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['pick_up_time']}" disabled>
+                            </div>
+                        </div>    
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">提货码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['take_code']}" disabled>
+                            </div>
+                            <label class="layui-form-label">提货有效期至</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" value="{$info['valid_date']}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+</div>
+
+
+{/block}
+
+{block name="script"}
+<script>
+
+    
+
+</script>
+{/block}

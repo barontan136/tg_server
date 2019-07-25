@@ -1,0 +1,173 @@
+{extend name="base" /}
+{block name="body"}
+<style>
+    .layui-word-aux{
+        float: none;
+        color: #333 !important;
+        font-size: 16px;
+        font-weight:bold;
+        margin-top: 10px;
+    }    
+    .layui-form-item .layui-form-checkbox[lay-skin=primary] {
+     margin-top: -2px;
+     margin-left: 10px;
+     font-weight: normal;
+}
+.authborder{
+    border: 1px #ccc solid;
+    padding: 10px;
+    border-radius: 5px
+}
+</style>
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('_save')}" method="post">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" value="" lay-verify="required"  placeholder="请输入姓名" class="layui-input">
+                        </div>
+                    </div>
+                     <div class="layui-form-item" pane="">
+                            <label class="layui-form-label"><span class="must_tip"> *</span>性别</label>
+                            <div class="layui-input-block userSex">
+                                <input type="radio" name="sex" value="1" title="男" checked>
+                                <input type="radio" name="sex" value="2" title="女" >
+                            </div>
+                        </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>用户名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="username" value="" required lay-verify="required" placeholder="请输入用户名" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>手机号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="mobile" value="" required lay-verify="required|phone" placeholder="请输入电话" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" name="password" value="" required lay-verify="required" placeholder="请输入密码" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>确认密码</label>
+                        <div class="layui-input-block">
+                            <input type="password" name="confirm_password" value="" required lay-verify="required" placeholder="请再次输入密码" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">岗位</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="worker" value=""  placeholder="请输入岗位" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>微信号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="wx" value="" lay-verify="required" placeholder="请输入微信号" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">邮箱</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="email" value=""  placeholder="请输入邮箱" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="status" value="1" title="启用" checked="checked">
+                            <input type="radio" name="status" value="-1" title="禁用">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">绑定微信管理员</label>
+                        <div class="layui-input-block">
+                            <div style="width:140px;text-align: center;margin-bottom: 10px;display: none">
+                                <p><img id="headimgurlimg" src="" style="width:70px;border-radius: 50%"></p>
+                                <p id="nicknamep"></p>
+                                <input type="hidden" id="openid" name="openid">
+                                <input type="hidden" id="nickname" name="nickname">
+                                <input type="hidden" id="headimgurl" name="headimgurl">
+                            </div>
+                            <a  type="button" class="layui-btn" select-weixin data-url="{:url('wechantuser')}"><i class="fa fa-wechat"></i> 选取微信用户</a>
+                        </div>
+                    </div>
+<!--                    <div class="layui-form-item">
+                        <label class="layui-form-label">绑定微信</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="isopenid" value="1" title="是" >
+                            <input type="radio" name="isopenid" value="0" title="否" checked="checked">
+                            <input type="hidden" name="openid">
+                        </div>
+                    </div>-->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>PC端权限设定</label>
+                        <div class="layui-input-block authborder">
+                            {foreach name="role_list" id="vo"}
+                             <div class="layui-form-mid layui-word-aux">{$key}<input type="checkbox" lay-skin="primary"  title="全部权限" lay-filter="chooseAll"></div>
+                             <div>
+                             {foreach name="vo" id="v"}
+                               <input type="checkbox"  name="group_ids[]" lay-skin="primary"  title="{$v.title}" value="{$v.id}">
+                             {/foreach}
+                             </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="must_tip"> *</span>移动端权限设定</label>
+                        <div class="layui-input-block authborder">
+                            {foreach name="phone_role_list" id="vo"}
+                             <div class="layui-form-mid layui-word-aux">{$key}<input type="checkbox" lay-skin="primary"  title="全部权限" lay-filter="chooseAll"></div>
+                             <div>
+                             {foreach name="vo" id="v"}
+                               <input type="checkbox"  name="phone_group_ids[]" lay-skin="primary"  title="{$v.title}" value="{$v.id}">
+                             {/foreach}
+                             </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+  //全选
+   form.on('checkbox(chooseAll)', function (data) {
+    var child = $(data.elem).parent().next('div').find('input[type="checkbox"]');
+    child.each(function (index, item) {
+            item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+//选择微信用户
+$('body').on('click','[select-weixin]',function(){
+    layer.close();
+    var _this = $(this);
+    window.wechant_user_index = layer.open({
+        type: 2,
+        title:"选择微信用户",
+        anim: 3,
+        area: ['50%', '510px'],
+        fixed: false, //不固定
+        maxmin: false,
+        content: _this.attr('data-url'), //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+    });
+})
+</script>
+{/block}

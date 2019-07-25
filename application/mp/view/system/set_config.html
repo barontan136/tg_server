@@ -1,0 +1,86 @@
+{extend name="base" /}
+{block name="body"}
+<style>
+    .layui-form-label { width: auto;}
+    .layui-input-block {margin-left: 12px;}
+    .layui-textarea {min-height: 200px;}
+</style>
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+         <ul class="layui-tab-title">
+             <li class=""><a href="{:url('config')}">配置管理</a></li>
+            <li class="layui-this">配 置</li>
+         </ul>
+    </div> 
+    <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title">
+            {volist name="group" id="vo"}
+              {if condition="$vo == $g"}
+                <li class="layui-this">{$vo}配置</li>
+              {else /}
+               <li class=""><a href="{:url('setConfig',['g'=>$vo])}">{$vo}配置</a></li>
+              {/if}
+            {/volist}
+            <li style="float: right;min-width:0px;" id="refresh">
+             <i class="layui-icon" style="font-size: 28px;">&#x1002;</i> 
+            </li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form form-container" action="{:url('')}" method="post">
+                    {volist name="_list" id="vo"}
+                    {switch name="vo.type" }
+                        {case value="2"}
+                          <div class="layui-form-item">
+                                <label class="layui-form-label">{$vo.title}</label>
+                                <div class="layui-input-block">
+                                    <select name="data[{$vo.id}][value]" lay-filter="type">
+                                       {volist name='vo.extra_text' id="v"}  
+                                       <option value="{$v}" {:$v==$vo.value?'selected':''}>{$v}</option>
+                                       {/volist}
+                                    </select>
+                                </div>
+                            </div>
+                        {/case}
+                        {case value="1"}
+                           <div class="layui-form-item">
+                                <label class="layui-form-label">{$vo.title}</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="data[{$vo.id}][value]" value="{$vo.value}"  placeholder="请输入配置名称,如:微信APPID" class="layui-input">
+                                </div>
+                            </div>
+                        {/case}
+                        {case value="3"}
+                           <div class="layui-form-item">
+                                <label class="layui-form-label">{$vo.title}</label>
+                                <div class="layui-input-block">
+                                    <textarea placeholder="请输入配置值" name="data[{$vo.id}][value]" class="layui-textarea">{$vo.value}</textarea>
+                                </div>
+                            </div>
+                        {/case}
+                    {/switch}
+                    {/volist}
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-danger" data-back>返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    $('#refresh').click(function(){
+        layer.load(0, {shade: 0.1});
+        setTimeout(function(){
+           window.location.reload();
+        },300);
+    })
+</script>
+{/block}

@@ -1,0 +1,243 @@
+{extend name="base" /}
+{block name="css"}
+<style type="text/css">
+
+</style>
+{/block}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">砍价活动详情</li>
+        </ul>
+        <div class="layui-tab-content">
+            <blockquote class="layui-elem-quote">
+                <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                    <div style="margin:10px">
+                        <form class="layui-form layui-form-pane" action="{:url('')}" method="get">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" value="{$info['name']}" class="layui-input" disabled>
+                                </div>
+                                <label class="layui-form-label">分享是否送积分</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['']}" disabled>
+                                </div>
+                            </div>    
+                            <div class="layui-form-item">
+                               <label class="layui-form-label">活动时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['begin_time']}" disabled>
+                                    <input type="text" class="layui-input" value="{$info['end_time']}" disabled>
+                                <label class="layui-form-label">单次分享获得积分</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['share_one_bonus']}" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">活动状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['status']}" disabled>
+                                    
+                                </div>
+                                <label class="layui-form-label">分享获得积分上限</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['share_max_bonus']}" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">砍价限时（小时）内/label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['in_hour']}" disabled>
+                                </div>
+                                <label class="layui-form-label">参与人数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['number']}" disabled>
+                                    
+                                </div>
+                            </div>
+                               <div class="layui-form-item">
+                                <label class="layui-form-label">最多可砍刀数/label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['max_number']}" disabled>
+                                </div>
+                                <label class="layui-form-label">配送方式</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['describution_tyoe']}" disabled>
+                                    
+                                </div>
+                            </div>
+                               <div class="layui-form-item">
+                                <label class="layui-form-label">活动规则/说明/label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" value="{$info['explain_rule']}" disabled>
+                                </div>
+                                
+                            </div>
+
+                    
+                    
+                    
+
+                </form>
+                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-content" style="height: 500px;">
+                <form action="" method="post" class="ajax-form layui-form">
+
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>商品名称</th>
+                                <th>商品数量</th>
+                                
+                                <th>商品现价</th>
+                                <th>最低成交价</th>
+                                <th>操作</th>
+                                
+                                
+                               
+
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist name='list' id='vo'}
+                            <tr>
+                                <td>{$vo['id']}</td>
+                                <td>{$vo['name']}</td>
+                                <td>{$vo['number']}</td>
+                                
+                                <td>{$vo['price']}</td>
+                                <td>{$vo['deal_price']}</td>
+                                <td></td>
+                                
+                               
+            
+                               
+                    </table>
+                </form></div> </div>
+                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-content" style="height: 500px;">
+                <form action="" method="post" class="ajax-form layui-form">
+
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>用户姓名</th>
+                                <th>用户手机号</th>
+                                <th>商品名称</th>
+                                <th>商品价格</th>
+                                <th>砍掉的价格</th>
+                                <th>砍价次数</th>
+                                <th>最终付款价格</th>
+                                <th>购买数量</th>
+                                <th>下单时间</th>
+                                <th>订单状态</th>
+                               
+                               
+
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist name='list' id='vo'}
+                            <tr>
+                                <td>{$vo['id']}</td>
+                                <td>{$vo['user_id']}</td>
+                                <td>{$vo['telephone']}</td>
+                                <td>{$vo['name']}</td>
+                                <td>{$vo['price']}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{$vo['deal_price']}</td>
+                                <td>{$vo['amount']}</td>
+                                <td>{$vo['pay_time]}</td>
+                                <td>{$vo['status']</td>
+                                
+                               
+            
+                               
+                    </table>
+                </form></div> </div>
+
+            </blockquote>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm iframe-add" data-url="{:url('ActivityTurantable/add')}"title="新增"><i class="fa fa-folder-o" aria-hidden="true"></i>新增</button>
+            <!--黑色分割线 start-->
+            <hr class="layui-bg-black">
+            <!--黑色分割线 end-->
+
+            
+                    </tbody>
+                
+                <!--分页-->
+                {//$list->render()}
+            </div>
+
+        </div>
+    </div>
+
+
+
+{/block}
+
+{block name="script"}
+<script>
+    substring('good_name', 10);
+
+    //日期范围
+    //日期范围
+    var startDates = '';
+    var endDates = '';
+    laydate.render({
+        elem: '#start_time'
+        , done: function (value, date, endDate) {
+            startDates = value;
+            if (startDates > endDates && endDates != '') {
+                layer.msg('开始日期应小于结束日期！');
+                $('#start_time').val('');
+                startDates = "";
+                form.render();
+                return false;
+            }
+        }
+    });
+    laydate.render({
+        elem: '#end_time'
+        , done: function (value, date, endDate) {
+            endDates = value;
+            if (endDates < startDates && startDates != '') {
+                layer.msg('结束日期应大于开始日期！');
+                $('#end_time').val('');
+                endDates = "";
+                form.render();
+                return false;
+            }
+        }
+    });
+    
+    $(document).on('click', '.pagination a', function () {
+        var search = $("#search").serializeArray();
+        var url = $(this).attr('href');
+        $.ajax({
+            type: 'get',
+            url: url,
+            data: search,
+            success: function (data) {
+                $('#wrap').html(data);
+                form.render();
+            }
+        });
+        return false;
+    });
+    
+    $(document).on('click', '.iframe-edit', function () {
+        var _this = $(this);
+        location.href = _this.attr('data-url');
+    });
+    
+</script>
+{/block}

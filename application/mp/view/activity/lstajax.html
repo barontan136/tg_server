@@ -1,0 +1,55 @@
+<form action="" method="post" class="ajax-form layui-form">
+
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>活动名称</th>
+                <th>活动类型</th>
+                <th>团长</th>
+                <th>团员</th>
+                <th>成团</th>
+                <th>进账</th>
+                <th>出账</th>
+                <th>浏览</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {notempty name='list'}
+            {volist name='list' id='vo' key='k'}
+            <tr>
+                <td>{$k}</td>
+                <td>{$vo['activity_name']}</td>
+                <td>{$vo['act_name']}</td>
+                <td>{$vo['leader_num']|default='0'}</td>
+                <td>{$vo['current_num']|default='0'}</td>
+                <td>{$vo['group_num']|default='0'}</td>
+                <td>{$vo['money_num']|default='0'}</td>
+                <td>0.00</td>
+                <td>{$vo['visit_num']|default='0'}</td>
+                <td>{$vo['status_name']}</td>
+                <td>
+                    <a data-url="{:url('add',['id'=>$vo.id,'type'=>'edit'])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>编辑
+                    </a>
+                    <a data-url="{:url('add',['id'=>$vo.id,'type'=>'copy'])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit">
+                        <i class="fa fa-copy" aria-hidden="true"></i> 复制
+                    </a>
+                    <a data-url="{:url('ActivityData/index',['act_id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs  iframe-edit">
+                        <i class="fa fa-database" aria-hidden="true"></i> 数据
+                    </a>
+                    <button type="button" data-action="{:url('Activity/delete',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs ajax-action">
+                        <i class="fa fa-warning" aria-hidden="true"></i> 删除
+                    </button>
+                </td>
+            </tr>
+            {/volist}
+            {/notempty}
+        </tbody>
+    </table>
+    {notempty name='list'}
+    {$list->render()}
+    {/notempty}
+</form>

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+curl http://saas.zhubaoe.cn/index.php/timing/statistics/mall
+exit 0

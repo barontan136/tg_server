@@ -1,0 +1,51 @@
+{extend name="base" /}
+{block name="body"}
+<div class="layui-body">
+    <!--tab标签-->
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">管理员列表</li>
+        </ul>
+        <div class="layui-tab-content">
+            <button type="button" class="layui-btn  layui-btn-sm iframe-add" data-url="{:url('add')}" id="config"><i class="fa fa-folder-o" aria-hidden="true"></i> 添加</button>
+            <div class="layui-tab-item layui-show">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">ID</th>
+                            <th>用户名</th>
+                            <th>姓名</th>
+                            <th>电话</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>最后登录时间</th>
+                            <th>最后登录IP</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach name="admin_user_list" item="vo"}
+                        {if $vo.is_admin!=1}
+                        <tr>
+                            <td>{$vo.id}</td>
+                            <td>{$vo.username}</td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.mobile}</td>
+                            <td>{php}echo $vo['status']==1 ? '启用' : '禁用';{/php}</td>
+                            <td>{:date('Y-m-d H:i',$vo.create_time)}</td>
+                            <td>{$vo.last_login_date}</td>
+                            <td>{$vo.last_login_ip_text}</td>
+                            <td>
+                                <a data-url="{:url('mp/admin_user/edit',['id'=>$vo['id']])}" class="layui-btn layui-btn-normal layui-btn-xs iframe-edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 编辑</a>
+                                <a href="{:url('mp/admin_user/delete',['id'=>$vo['id']])}" class="layui-btn layui-btn-danger layui-btn-xs ajax-delete"><i class="fa fa-trash" aria-hidden="true"></i> 删除</a>
+                            </td>
+                        </tr>
+                        {/if}
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

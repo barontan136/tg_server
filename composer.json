@@ -1,0 +1,16 @@
+{
+    "autoload": {
+        "psr-4": {
+            "app\\": "application/"
+        },
+        "classmap": ["extend/", "thinkphp/"]
+    },
+    "require": {
+        "datastax/php-driver": "v1.3.0",
+        "phpoffice/phpexcel": "^1.7",
+        "topthink/framework": "^5.0",
+        "topthink/think-captcha": "^1.0",
+        "topthink/think-image": "^1.0",
+        "topthink/think-helper": "^1.0"
+    }
+}
